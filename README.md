@@ -8,6 +8,13 @@ Public static teaching site for beginner SAS data onboarding practice.
 - `teaching-site/index.html`: lesson workspace
 - `teaching-site/quiz.html`: SAS Studio-like quiz lab
 
+## Learning Sources
+
+The lesson workspace references SAS Help Center, SAS GitHub examples, UCLA OARC
+modules, PHUSE examples, and The Little SAS Book resources. Links are shown
+inside each lesson as learning references; no copyrighted book text is copied
+into this site.
+
 ## Data Boundary
 
 This repository is for synthetic teaching examples only. Do not publish PHI,

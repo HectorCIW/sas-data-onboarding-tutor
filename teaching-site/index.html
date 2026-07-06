@@ -814,6 +814,10 @@
                   <strong>常見錯誤</strong>
                   <ul class="text-list" id="mistake-list"></ul>
                 </div>
+                <div>
+                  <strong>參考來源</strong>
+                  <div class="reference-list" id="reference-list"></div>
+                </div>
               </div>
             </section>
 
@@ -893,6 +897,22 @@
       informat: {
         title: 'SAS Help Center: Formatted INPUT Statement',
         url: 'https://documentation.sas.com/doc/en/lestmtsref/latest/p0f9yk6pd4znukn1rlw6hzkg1url.htm'
+      },
+      littleSasBook: {
+        title: 'The Little SAS Book: A Primer, Sixth Edition',
+        url: 'https://sasinstitute.redshelf.com/app/ecom/book/1830656/the-little-sas-book-1830656-9781642953435-lora-d-delwiche-susan-j-slaughter'
+      },
+      littleSasExcerpt: {
+        title: 'SAS excerpt: The Little SAS Book table of contents',
+        url: 'https://www.sas.com/storefront/aux/en/splsb/73044_excerpt.pdf'
+      },
+      littleSasData: {
+        title: 'GitHub: Little SAS Book example data',
+        url: 'https://github.com/sassoftware/little-sas-book'
+      },
+      littleSasExercises: {
+        title: 'GitHub: Little SAS Book exercises',
+        url: 'https://github.com/sassoftware/little-sas-book-exercises-6ed'
       },
       sasCodeExamples: {
         title: 'GitHub: sassoftware/sas-code-examples',
@@ -1274,8 +1294,9 @@
         subtitle: 'source type / grain / risk',
         objective: '先判斷來源是 spec、dataset 還是 database，並說清楚一列資料代表什麼。',
         flow: 'Orient',
-        refs: ['dataStep', 'import', 'sasCodeExamples', 'uclaModules'],
+        refs: ['littleSasBook', 'littleSasExcerpt', 'dataStep', 'import', 'sasCodeExamples', 'uclaModules'],
         concepts: [
+          ['Little SAS 對照', '先用短主題理解 SAS language、SAS data set、DATA step 與 PROC step，再回到本課判斷 source type。'],
           ['Source type', 'Dataset 有實際資料列；spec 是欄位契約；database 需要先界定 table 與抽樣策略。'],
           ['Grain', '每一列代表 subject、visit、lab result 或 metadata row，會決定 key 和 QC 方法。'],
           ['Evidence first', '從一開始就保留 row count、欄位數、log scan 和缺口清單。'],
@@ -1295,8 +1316,9 @@
         subtitle: 'LIBNAME / WORK / permanent data',
         objective: '理解 WORK 暫存表、永久 library、外部資料來源與輸出資料夾的差異。',
         flow: 'Library',
-        refs: ['dataStep', 'learningByExample', 'procXGit'],
+        refs: ['littleSasBook', 'littleSasData', 'dataStep', 'learningByExample', 'procXGit'],
         concepts: [
+          ['Little SAS 對照', '把 SAS data libraries、WORK、永久資料集當成本課的先備概念。'],
           ['WORK', 'WORK 是 session 暫存 library，重開 session 後不保留。'],
           ['LIBNAME', 'LIBNAME 把 SAS 名稱連到資料夾、資料庫或其他引擎。'],
           ['Separation', 'raw、derived、reports 分開，教學和 QC 會更清楚。'],
@@ -1316,8 +1338,9 @@
         subtitle: 'PROC IMPORT / bounded extract',
         objective: '把外部來源變成穩定的 SAS table，並降低型別猜測、長度截斷與抽樣偏誤。',
         flow: 'Import',
-        refs: ['import', 'informat', 'sasCodeExamples', 'learningByExample'],
+        refs: ['littleSasBook', 'littleSasData', 'import', 'informat', 'sasCodeExamples', 'learningByExample'],
         concepts: [
+          ['Little SAS 對照', '先理解 getting data into SAS，再比較 PROC IMPORT、INFILE/INPUT 與 XLSX/CSV 的風險。'],
           ['PROC IMPORT', '適合初學者快速匯入 CSV、Excel 等外部檔案，但仍要檢查型別與長度。'],
           ['GUESSINGROWS', 'CSV 型別猜測可能受前幾列影響，教學時要明確檢查結果。'],
           ['Excel risk', '混合型別欄位可能被猜錯，匯入後必須看 PROC CONTENTS。'],
@@ -1337,8 +1360,9 @@
         subtitle: 'PROC CONTENTS / dictionary tables',
         objective: '在轉換前確認欄位名稱、型別、長度、format、informat、label 與樣本列。',
         flow: 'Inspect',
-        refs: ['dataStep', 'uclaModules', 'sasCodeExamples'],
+        refs: ['littleSasBook', 'littleSasData', 'dataStep', 'uclaModules', 'sasCodeExamples'],
         concepts: [
+          ['Little SAS 對照', '把 viewing properties、reading the log、viewing results 變成每次匯入後的固定檢查。'],
           ['PROC CONTENTS', '取得資料集 metadata，是初學者進入任何資料前的第一個檢查。'],
           ['dictionary.columns', '適合跨 library 或 database table 查欄位清單。'],
           ['OBS sample', 'PROC PRINT(obs=) 只能看樣本，不等於資料品質驗證完成。'],
@@ -1358,8 +1382,9 @@
         subtitle: 'LENGTH / INPUT / IF / WHERE',
         objective: '學會建立新欄位、轉日期、篩選列、處理 missing，並避免隱性型別轉換。',
         flow: 'Transform',
-        refs: ['dataStep', 'where', 'ifStmt', 'informat', 'learningByExample'],
+        refs: ['littleSasBook', 'littleSasExercises', 'dataStep', 'where', 'ifStmt', 'informat', 'learningByExample'],
         concepts: [
+          ['Little SAS 對照', 'DATA step、built-in loop、assignment statement、IF/WHERE 是本課核心。'],
           ['DATA step', '可建立變數、選列、改欄位、套用條件邏輯，是 SAS 資料轉換核心。'],
           ['INPUT + informat', '文字日期要用 INPUT 搭配 informat 轉成 SAS date，再用 format 顯示。'],
           ['WHERE vs IF', 'WHERE 在讀入前篩選；subsetting IF 在 DATA step 中處理後篩選。'],
@@ -1379,8 +1404,9 @@
         subtitle: 'PROC FREQ / PROC MEANS',
         objective: '用類別分布和連續變數摘要找出 missing、極端值、不合理 category 與資料量問題。',
         flow: 'Summarize',
-        refs: ['freq', 'uclaModules', 'learningByExample'],
+        refs: ['littleSasBook', 'littleSasExercises', 'freq', 'uclaModules', 'learningByExample'],
         concepts: [
+          ['Little SAS 對照', '把 summarizing data、producing simple reports 當作 QC，不要直接當正式結論。'],
           ['PROC FREQ', '適合 category、flag、missing level、controlled terminology 檢查。'],
           ['PROC MEANS', '適合 numeric 欄位的 N、NMISS、mean、median、min、max。'],
           ['CLASS', '用 CLASS 依群組摘要，先確認群組欄位 level 合理。'],
@@ -1400,8 +1426,9 @@
         subtitle: 'PROC SORT / FIRST. / LAST.',
         objective: '理解 BY group 前必須排序，並用 NODUPKEY、DUPOUT 和 FIRST./LAST. 做 key 檢查。',
         flow: 'Sort/BY',
-        refs: ['sort', 'byGroup', 'uclaModules', 'learningByExample'],
+        refs: ['littleSasBook', 'littleSasExercises', 'sort', 'byGroup', 'uclaModules', 'learningByExample'],
         concepts: [
+          ['Little SAS 對照', '把 sorting data 與 combining/modifying data 的主題接到本課 BY-group 思維。'],
           ['PROC SORT', 'BY processing 通常需要資料依 BY variables 排序。'],
           ['FIRST./LAST.', 'DATA step BY group 會提供 FIRST.variable 和 LAST.variable 旗標。'],
           ['NODUPKEY', '可產生唯一 key 輸出，但不應在沒審查前拿來靜默刪資料。'],
@@ -1421,8 +1448,9 @@
         subtitle: 'SELECT / GROUP BY / JOIN',
         objective: '用 PROC SQL 做抽樣、彙總、join 與 spec gap table，同時注意 join key 和 row multiplication。',
         flow: 'SQL',
-        refs: ['sqlJoin', 'uclaSql', 'sasCodeExamples'],
+        refs: ['littleSasBook', 'littleSasExercises', 'sqlJoin', 'uclaSql', 'sasCodeExamples'],
         concepts: [
+          ['Little SAS 對照', '第六版新增 PROC SQL 相關主題，可用來對照 SELECT、GROUP BY、JOIN 的入門語法。'],
           ['SELECT', 'PROC SQL 可讀 SAS data set 或 database table，適合查詢與彙總。'],
           ['GROUP BY', '彙總前要確認 group level 和 row grain。'],
           ['JOIN', 'Join 前要檢查 key 唯一性，否則可能 row multiplication。'],
@@ -1484,8 +1512,9 @@
         subtitle: 'Log scan / row counts / blocker',
         objective: '把 SAS 執行結果轉成可重跑、可審查的 evidence，而不是只看畫面。',
         flow: 'Validate',
-        refs: ['dataStep', 'freq', 'sasCodeExamples', 'phuseScripts'],
+        refs: ['littleSasBook', 'littleSasExcerpt', 'dataStep', 'freq', 'sasCodeExamples', 'phuseScripts'],
         concepts: [
+          ['Little SAS 對照', '閱讀 log、查看 results、理解 step boundary 是每次交付前的基本功。'],
           ['ERROR', 'SAS log 中的 ERROR 必須修正，不能只看 output table。'],
           ['WARNING', 'WARNING 可能代表 macro、format、merge、資料存取問題。'],
           ['Suspicious NOTE', '型別轉換、missing 生成、uninitialized variable 都可能讓結果錯誤。'],
@@ -1751,6 +1780,11 @@
       </div>`).join('');
       document.getElementById('task-list').innerHTML = module.tasks.map((task) => `<li>${escapeHtml(task)}</li>`).join('');
       document.getElementById('mistake-list').innerHTML = module.mistakes.map((mistake) => `<li>${escapeHtml(mistake)}</li>`).join('');
+      document.getElementById('reference-list').innerHTML = module.refs
+        .map((key) => referenceLibrary[key])
+        .filter(Boolean)
+        .map((ref) => `<a href="${escapeHtml(ref.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ref.title)}</a>`)
+        .join('');
     }
 
     function render() {
