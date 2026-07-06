@@ -1,0 +1,1849 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAS Data Onboarding Tutor</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f4f6f8;
+      --surface: #ffffff;
+      --ink: #17202a;
+      --muted: #5d6875;
+      --line: #d8dde5;
+      --accent: #1f6f8b;
+      --accent-soft: #e5f3f7;
+      --green: #146c43;
+      --green-soft: #e7f4ed;
+      --amber: #936000;
+      --amber-soft: #fff2cd;
+      --red: #b42318;
+      --red-soft: #fde8e7;
+      --code: #111827;
+      --code-bg: #f0f3f6;
+      --shadow: 0 1px 2px rgba(16, 24, 40, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--page);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    a.button {
+      text-decoration: none;
+    }
+
+    code,
+    pre,
+    textarea {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: 0;
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.15rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .button {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+    }
+
+    .button.secondary {
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .button:focus-visible,
+    a.button:focus-visible,
+    .module-button:focus-visible,
+    .choice:focus-visible,
+    .chip:focus-visible {
+      outline: 3px solid rgba(31, 111, 139, .25);
+      outline-offset: 2px;
+    }
+
+    .workspace {
+      width: min(1680px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+    }
+
+    .sidebar,
+    .lesson {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .sidebar {
+      align-self: start;
+    }
+
+    .section-head {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: .98rem;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .module-list {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .module-button {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      min-height: 58px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      text-align: left;
+      color: var(--ink);
+    }
+
+    .module-button[aria-current="true"] {
+      border-color: rgba(31, 111, 139, .45);
+      background: var(--accent-soft);
+    }
+
+    .step-index {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--code-bg);
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .module-button[aria-current="true"] .step-index {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .module-title {
+      display: block;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .module-subtitle {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: .84rem;
+      line-height: 1.25;
+    }
+
+    .lesson {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      overflow: hidden;
+    }
+
+    .lesson-head {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 12px;
+    }
+
+    .lesson-title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .lesson-title-row h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: 0;
+    }
+
+    .lesson-title-row p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-weight: 800;
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .source-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      min-height: 34px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .chip[aria-pressed="true"] {
+      border-color: rgba(31, 111, 139, .55);
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .lesson-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(380px, .95fr);
+      gap: 14px;
+      padding: 14px;
+      align-items: start;
+    }
+
+    .left-stack {
+      min-width: 0;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      min-width: 0;
+    }
+
+    .panel h3 {
+      margin: 0;
+      padding: 12px 13px;
+      border-bottom: 1px solid var(--line);
+      font-size: .98rem;
+      letter-spacing: 0;
+    }
+
+    .panel-body {
+      padding: 13px;
+      overflow-x: hidden;
+    }
+
+    .mini-table {
+      width: 100%;
+      min-width: 0;
+      table-layout: fixed;
+      border-collapse: collapse;
+      font-size: .8rem;
+    }
+
+    .mini-table th,
+    .mini-table td {
+      padding: 7px 6px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .mini-table th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .profile-bars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(132px, 158px));
+      justify-content: start;
+      gap: 6px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 2px;
+      min-height: 46px;
+      padding: 6px 7px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fbfcfd;
+      font-size: .78rem;
+      overflow: hidden;
+    }
+
+    .bar-row span,
+    .bar-row strong {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .bar-row strong {
+      color: var(--accent);
+      font-size: .73rem;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    .code-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+
+    .code-editor {
+      width: 100%;
+      min-height: 420px;
+      resize: vertical;
+      border: 0;
+      padding: 14px;
+      background: var(--code-bg);
+      color: var(--code);
+      line-height: 1.45;
+      font-size: .9rem;
+      outline: 0;
+    }
+
+    .run-output {
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .run-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 700;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--code-bg);
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .status-pill.ok {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .status-pill.warn {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .status-pill.fail {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+      gap: 0;
+    }
+
+    .result-pane {
+      min-width: 0;
+      padding: 13px;
+    }
+
+    .result-pane + .result-pane {
+      border-left: 1px solid var(--line);
+    }
+
+    .result-pane h4 {
+      margin: 0 0 8px;
+      font-size: .9rem;
+      letter-spacing: 0;
+    }
+
+    .log-lines {
+      min-height: 112px;
+      margin: 0;
+      padding: 10px;
+      border-radius: 7px;
+      background: var(--code-bg);
+      color: var(--code);
+      overflow: auto;
+      white-space: pre-wrap;
+      font-size: .82rem;
+      line-height: 1.42;
+    }
+
+    .output-table-wrap {
+      overflow-x: auto;
+    }
+
+    .output-table {
+      width: 100%;
+      min-width: 460px;
+      border-collapse: collapse;
+      font-size: .84rem;
+    }
+
+    .output-table th,
+    .output-table td {
+      padding: 7px 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .output-table th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .quiz-list,
+    .checklist,
+    .text-list,
+    .reference-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 10px;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      text-align: left;
+    }
+
+    .choice.correct {
+      border-color: rgba(20, 108, 67, .55);
+      background: var(--green-soft);
+    }
+
+    .choice.incorrect {
+      border-color: rgba(180, 35, 24, .55);
+      background: var(--red-soft);
+    }
+
+    .feedback {
+      min-height: 24px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .lesson-notes {
+      display: grid;
+      gap: 12px;
+    }
+
+    .note-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .note-box {
+      min-height: 96px;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfd;
+    }
+
+    .note-box strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: .9rem;
+    }
+
+    .note-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .text-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .text-list li {
+      padding-left: 2px;
+    }
+
+    .reference-list a {
+      display: block;
+      padding: 8px 9px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 1780px) {
+      .workspace {
+        grid-template-columns: 300px minmax(0, 1fr);
+      }
+
+      .lesson-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .question-card {
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .question-card p {
+      margin: 0 0 8px;
+      font-weight: 800;
+    }
+
+    .quiz-score {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: .9rem;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .check-item:last-child {
+      border-bottom: 0;
+    }
+
+    .check-dot {
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .evidence-section {
+      padding: 13px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .evidence-section:last-child {
+      border-bottom: 0;
+    }
+
+    .evidence-section h3 {
+      margin: 0 0 10px;
+      font-size: .95rem;
+      letter-spacing: 0;
+    }
+
+    .command-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .command-list code {
+      display: block;
+      padding: 9px;
+      border-radius: 7px;
+      background: var(--code-bg);
+      color: var(--code);
+      overflow-wrap: anywhere;
+      font-size: .8rem;
+    }
+
+    .small-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1180px) {
+      .workspace {
+        grid-template-columns: 240px minmax(0, 1fr);
+      }
+
+    }
+
+    @media (max-width: 840px) {
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .lesson-body {
+        grid-template-columns: 1fr;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-pane + .result-pane {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">SAS</div>
+        <div>
+          <h1>SAS Data Onboarding Tutor</h1>
+          <p>從資料入口練到可驗證的 SAS workflow</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="button secondary" id="reset-progress" type="button">重置練習</button>
+        <a class="button secondary" href="quiz.html">課程測驗</a>
+        <button class="button" id="copy-code" type="button">複製程式</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar" aria-label="課程模組">
+        <div class="section-head">
+          <h2>課程路徑</h2>
+          <p id="progress-label">0 / 5 完成</p>
+        </div>
+        <nav class="module-list" id="module-list"></nav>
+      </aside>
+
+      <section class="lesson" aria-label="教學工作區">
+        <div class="lesson-head">
+          <div class="lesson-title-row">
+            <div>
+              <h2 id="lesson-title"></h2>
+              <p id="lesson-objective"></p>
+            </div>
+            <span class="pill" id="source-pill">dataset</span>
+          </div>
+          <div class="source-switcher" aria-label="資料入口">
+            <button class="chip" type="button" data-source="dataset" aria-pressed="true">Dataset</button>
+            <button class="chip" type="button" data-source="spec" aria-pressed="false">Spec</button>
+            <button class="chip" type="button" data-source="database" aria-pressed="false">Database</button>
+          </div>
+        </div>
+
+        <div class="lesson-body">
+          <div class="left-stack">
+            <section class="panel">
+              <h3>練習資料</h3>
+              <div class="panel-body">
+                <table class="mini-table" id="sample-table"></table>
+              </div>
+            </section>
+
+            <section class="panel" style="margin-top: 14px;">
+              <h3>欄位 profile</h3>
+              <div class="panel-body">
+                <div class="profile-bars" id="profile-bars"></div>
+              </div>
+            </section>
+
+            <section class="panel" style="margin-top: 14px;">
+              <h3>學習筆記</h3>
+              <div class="panel-body lesson-notes">
+                <div class="note-grid" id="concept-grid"></div>
+                <div>
+                  <strong>實作步驟</strong>
+                  <ol class="text-list" id="task-list"></ol>
+                </div>
+                <div>
+                  <strong>常見錯誤</strong>
+                  <ul class="text-list" id="mistake-list"></ul>
+                </div>
+              </div>
+            </section>
+
+          </div>
+
+          <section class="panel">
+            <h3>SAS 程式工作區</h3>
+            <div class="code-tools">
+              <button class="button secondary" type="button" id="reset-code">還原本課程程式</button>
+              <button class="button" type="button" id="compile-code">編譯檢查</button>
+              <button class="button secondary" type="button" id="print-result">列印結果</button>
+              <button class="button secondary" type="button" id="mark-complete">標記完成</button>
+            </div>
+            <textarea class="code-editor" id="sas-code" spellcheck="false"></textarea>
+            <div class="run-output" id="run-output" aria-live="polite">
+              <div class="run-summary">
+                <span class="status-pill" id="compile-status">尚未編譯</span>
+                <span id="compile-summary">等待 SAS 程式檢查。</span>
+              </div>
+              <div class="result-grid">
+                <div class="result-pane">
+                  <h4>SAS log</h4>
+                  <pre class="log-lines" id="compile-log">按下「編譯檢查」後會顯示教學用 SAS log。</pre>
+                </div>
+                <div class="result-pane">
+                  <h4>Output</h4>
+                  <div class="output-table-wrap" id="print-output">
+                    <p class="small-note">按下「列印結果」後會顯示本課的預期表格。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const referenceLibrary = {
+      dataStep: {
+        title: 'SAS Help Center: The DATA Step',
+        url: 'https://documentation.sas.com/doc/en/lepg/latest/n14fu9c6l8rxbxn1nvdhlaqtsyho.htm'
+      },
+      import: {
+        title: 'SAS Help Center: IMPORT Procedure',
+        url: 'https://go.documentation.sas.com/doc/ru/pgmsascdc/9.4_3.5/proc/n1qn5sclnu2l9dn1w61ifw8wqhts.htm'
+      },
+      where: {
+        title: 'SAS Help Center: WHERE Statement',
+        url: 'https://documentation.sas.com/doc/en/pgmsascdc/v_069/lestmtsref/n1xbr9r0s9veq0n137iftzxq4g7e.htm'
+      },
+      ifStmt: {
+        title: 'SAS Help Center: IF Statements',
+        url: 'https://documentation.sas.com/doc/en/pgmsascdc/v_064/lepg/p14r1os7eztb29n1tblrzh41rsg9.htm'
+      },
+      freq: {
+        title: 'SAS Help Center: PROC FREQ TABLES Statement',
+        url: 'https://documentation.sas.com/doc/en/procstat/9.4/procstat_freq_syntax08.htm'
+      },
+      sort: {
+        title: 'SAS Help Center: PROC SORT Examples',
+        url: 'https://documentation.sas.com/doc/en/vwbproc/v_001/p0qh2iuz3fa6rpn1eib1gaxr0sb5.htm'
+      },
+      byGroup: {
+        title: 'SAS Help Center: BY-Group Processing',
+        url: 'https://documentation.sas.com/doc/en/pgmsascdc/v_070/lepg/n1nd5dg9h8blkkn19c2lsajf3tzs.htm'
+      },
+      sqlJoin: {
+        title: 'SAS Help Center: PROC SQL Joins',
+        url: 'https://documentation.sas.com/doc/en/sqlproc/latest/p0o4a5ac71mcchn1kc1zhxdnm139.htm'
+      },
+      report: {
+        title: 'SAS Help Center: PROC REPORT Examples',
+        url: 'https://documentation.sas.com/doc/ru/pgmsascdc/9.4_3.5/odsacoutput/n096rqsjmw4m4nn1dvdwf0zvw453.htm'
+      },
+      informat: {
+        title: 'SAS Help Center: Formatted INPUT Statement',
+        url: 'https://documentation.sas.com/doc/en/lestmtsref/latest/p0f9yk6pd4znukn1rlw6hzkg1url.htm'
+      },
+      sasCodeExamples: {
+        title: 'GitHub: sassoftware/sas-code-examples',
+        url: 'https://github.com/sassoftware/sas-code-examples'
+      },
+      learningByExample: {
+        title: 'GitHub: Learning SAS by Example sample code',
+        url: 'https://github.com/sascommunities/learning-sas-by-example-2nd'
+      },
+      sasAccessSamples: {
+        title: 'GitHub: sassoftware/sas-access-samples',
+        url: 'https://github.com/sassoftware/sas-access-samples'
+      },
+      phuseScripts: {
+        title: 'GitHub: PHUSE clinical SAS scripts',
+        url: 'https://github.com/phuse-org/phuse-scripts'
+      },
+      uclaModules: {
+        title: 'UCLA OARC: SAS Learning Modules',
+        url: 'https://stats.oarc.ucla.edu/sas/modules/'
+      },
+      uclaSql: {
+        title: 'UCLA OARC: Collapsing across observations using PROC SQL',
+        url: 'https://stats.oarc.ucla.edu/sas/modules/collapsing-across-observations-using-proc-sql/'
+      },
+      procXGit: {
+        title: 'PROC-X: Organizing SAS projects in Git',
+        url: 'https://proc-x.com/2020/11/how-to-organize-your-sas-projects-in-git/'
+      }
+    };
+
+    const sourceProfiles = {
+      dataset: {
+        label: 'dataset',
+        boundary: '目前視為 raw training dataset；分析前要先確認 key、missing、日期欄位與類別值。',
+        table: {
+          headers: ['subject_id', 'group', 'age', 'visit_date', 'score', 'site_id'],
+          rows: [
+            ['S001', 'A', '34', '2026-01-02', '12.5', '101'],
+            ['S002', 'B', '41', '2026-01-03', '', '101'],
+            ['S003', 'A', '29', '2026-01-04', '15.2', '102'],
+            ['S004', 'C', '58', '2026-01-07', '18.9', '102']
+          ]
+        },
+        profiles: [
+          ['subject_id', 'candidate key', 100],
+          ['group', 'categorical', 75],
+          ['age', 'numeric measure', 100],
+          ['visit_date', 'date/time', 100],
+          ['score', 'numeric measure', 75],
+          ['site_id', 'join field', 80]
+        ]
+      },
+      spec: {
+        label: 'spec',
+        boundary: 'Spec 是 metadata contract；不能假設資料值存在，要先做欄位、型別、長度與 label 對照。',
+        table: {
+          headers: ['variable', 'label', 'type', 'length', 'required', 'codelist'],
+          rows: [
+            ['subject_id', 'Subject identifier', 'char', '12', 'Y', ''],
+            ['visit_date', 'Visit date', 'date', '10', 'Y', 'ISO8601'],
+            ['group', 'Treatment group', 'char', '1', 'Y', 'A/B/C'],
+            ['score', 'Assessment score', 'num', '8', 'N', '']
+          ]
+        },
+        profiles: [
+          ['variable', 'metadata key', 100],
+          ['label', 'descriptor', 100],
+          ['type', 'type contract', 100],
+          ['length', 'length contract', 100],
+          ['required', 'rule flag', 85],
+          ['codelist', 'controlled term', 65]
+        ]
+      },
+      database: {
+        label: 'database',
+        boundary: 'Database 入口先看 metadata 與 bounded sample；不要直接拉全表，先確認 table grain、key 與 join 欄位。',
+        table: {
+          headers: ['table_name', 'column_name', 'type', 'nullable', 'role'],
+          rows: [
+            ['visits', 'subject_id', 'varchar', 'NO', 'key'],
+            ['visits', 'visit_date', 'date', 'NO', 'time'],
+            ['visits', 'score', 'numeric', 'YES', 'measure'],
+            ['sites', 'site_id', 'integer', 'NO', 'join key']
+          ]
+        },
+        profiles: [
+          ['subject_id', 'candidate key', 100],
+          ['visit_date', 'date/time', 100],
+          ['score', 'numeric measure', 80],
+          ['group_name', 'categorical', 60],
+          ['site_id', 'join field', 75]
+        ]
+      }
+    };
+
+    const lessonPractice = {
+      orient: {
+        dataset: {
+          table: {
+            headers: ['source_name', 'source_type', 'row_grain', 'key_candidate', 'date_field', 'row_count', 'risk'],
+            rows: [
+              ['raw_visits.csv', 'dataset', 'one subject visit', 'subject_id + visit_num', 'visit_date', '420', 'missing score'],
+              ['lab_dictionary.xlsx', 'spec', 'one variable definition', 'variable', '', '64', 'metadata only'],
+              ['edc.visit', 'database', 'one EDC visit row', 'study_id + subject_id + visit_num', 'visit_dtc', '18520', 'bounded extract needed'],
+              ['ae_raw.xpt', 'dataset', 'one adverse event', 'usubjid + aeterm + aestdtc', 'aestdtc', '218', 'clinical boundary']
+            ]
+          },
+          profiles: [
+            ['source_type', 'routing key', 100],
+            ['row_grain', 'grain decision', 100],
+            ['key_candidate', 'candidate key', 90],
+            ['risk', 'onboarding blocker', 80]
+          ]
+        }
+      },
+      library: {
+        dataset: {
+          table: {
+            headers: ['libref', 'engine', 'physical_path', 'member', 'rows', 'write_role', 'purpose'],
+            rows: [
+              ['RAW', 'V9', 'data/raw', 'source', '420', 'read only', 'source retention'],
+              ['DERIVED', 'V9', 'data/derived', 'analysis_ready', '0', 'write', 'DATA step output'],
+              ['QC', 'V9', 'reports/qc', 'columns', '0', 'write', 'inspection evidence'],
+              ['WORK', 'TEMP', 'session', 'source_spec', '64', 'write', 'scratch table']
+            ]
+          },
+          profiles: [
+            ['RAW', 'read-only source', 100],
+            ['DERIVED', 'permanent output', 90],
+            ['QC', 'evidence library', 80],
+            ['WORK', 'session temporary', 95]
+          ]
+        }
+      },
+      import: {
+        dataset: {
+          table: {
+            headers: ['subject_id', 'visit_num', 'visit_date_raw', 'group_raw', 'age_raw', 'score_raw', 'site_id', 'import_risk'],
+            rows: [
+              ['S001', '1', '2026-01-02', 'A', '34', '12.5', '101', 'clean'],
+              ['S001', '2', '01/16/2026', 'A', '34', '13.1', '101', 'mixed date style'],
+              ['S002', '1', '2026-01-03', 'B', '41', '', '101', 'missing score'],
+              ['S003', '1', '2026-01-04', 'A', '29', '15.2 mg', '102', 'numeric stored with unit'],
+              ['S004', '1', '2026-13-07', 'C', '58', '18.9', '102', 'invalid month']
+            ]
+          },
+          profiles: [
+            ['visit_date_raw', 'informat risk', 100],
+            ['score_raw', 'type guessing risk', 95],
+            ['group_raw', 'controlled term', 75],
+            ['site_id', 'join field', 70]
+          ]
+        }
+      },
+      inspect: {
+        dataset: {
+          table: {
+            headers: ['name', 'type', 'length', 'format', 'informat', 'label', 'review_note'],
+            rows: [
+              ['subject_id', 'char', '12', '', '', 'Subject identifier', 'candidate key component'],
+              ['visit_date', 'num', '8', 'YYMMDD10.', 'YYMMDD10.', 'Visit date', 'SAS date confirmed'],
+              ['score', 'num', '8', '8.1', '', 'Assessment score', 'nmiss required'],
+              ['group', 'char', '1', '', '', 'Treatment group', 'controlled values A/B/C'],
+              ['site_id', 'num', '8', 'Z3.', '', 'Site identifier', 'join field']
+            ]
+          },
+          profiles: [
+            ['name', 'metadata key', 100],
+            ['type', 'type contract', 100],
+            ['format', 'display rule', 90],
+            ['review_note', 'QC action', 85]
+          ]
+        }
+      },
+      transform: {
+        dataset: {
+          table: {
+            headers: ['subject_id', 'visit_date', 'score', 'age', 'expected_visit_dt', 'expected_age_group', 'expected_qc_flag'],
+            rows: [
+              ['S001', '2026-01-02', '12.5', '34', '2026-01-02', 'LT40', '0'],
+              ['S002', '2026-01-03', '', '41', '2026-01-03', 'GE40', '1'],
+              ['S003', '2026-01-04', '15.2', '29', '2026-01-04', 'LT40', '0'],
+              ['S004', '2026-01-07', '18.9', '58', '2026-01-07', 'GE40', '0'],
+              ['S005', 'bad-date', '17.0', '37', '.', 'LT40', '1']
+            ]
+          },
+          profiles: [
+            ['visit_date', 'INPUT target', 100],
+            ['score', 'missing flag source', 90],
+            ['age', 'derived category source', 85],
+            ['expected_qc_flag', 'validation target', 80]
+          ]
+        }
+      },
+      summarize: {
+        dataset: {
+          table: {
+            headers: ['group', 'age_group', 'subject_id', 'score', 'qc_missing_score', 'outlier_flag', 'site_id'],
+            rows: [
+              ['A', 'LT40', 'S001', '12.5', '0', '0', '101'],
+              ['A', 'LT40', 'S003', '15.2', '0', '0', '102'],
+              ['B', 'GE40', 'S002', '', '1', '0', '101'],
+              ['C', 'GE40', 'S004', '18.9', '0', '0', '102'],
+              ['C', 'GE40', 'S006', '99.9', '0', '1', '103']
+            ]
+          },
+          profiles: [
+            ['group', 'PROC FREQ level', 100],
+            ['age_group', 'CLASS variable', 90],
+            ['score', 'PROC MEANS var', 100],
+            ['outlier_flag', 'QC stratum', 75]
+          ]
+        }
+      },
+      sortBy: {
+        dataset: {
+          table: {
+            headers: ['subject_id', 'visit_num', 'visit_dt', 'score', 'source_row', 'expected_first', 'duplicate_key'],
+            rows: [
+              ['S001', '1', '2026-01-02', '12.5', '1', 'Y', 'N'],
+              ['S001', '2', '2026-01-16', '13.1', '2', 'N', 'N'],
+              ['S002', '1', '2026-01-03', '', '3', 'Y', 'N'],
+              ['S003', '1', '2026-01-04', '15.2', '4', 'Y', 'Y'],
+              ['S003', '1', '2026-01-04', '15.2', '5', 'N', 'Y']
+            ]
+          },
+          profiles: [
+            ['subject_id', 'BY group key', 100],
+            ['visit_dt', 'sort order', 95],
+            ['expected_first', 'FIRST. target', 85],
+            ['duplicate_key', 'DUPOUT evidence', 90]
+          ]
+        }
+      },
+      sql: {
+        dataset: {
+          table: {
+            headers: ['table', 'subject_id', 'visit_dt', 'site_id', 'site_name', 'score', 'join_issue'],
+            rows: [
+              ['visits', 'S001', '2026-01-02', '101', '', '12.5', 'needs site join'],
+              ['visits', 'S002', '2026-01-03', '101', '', '', 'missing measure'],
+              ['visits', 'S003', '2026-01-04', '102', '', '15.2', 'needs site join'],
+              ['sites', '', '', '101', 'North', '', 'one row per site'],
+              ['sites', '', '', '102', 'South', '', 'one row per site']
+            ]
+          },
+          profiles: [
+            ['site_id', 'join key', 100],
+            ['subject_id', 'group by key', 90],
+            ['score', 'aggregate measure', 85],
+            ['join_issue', 'row count risk', 80]
+          ]
+        }
+      },
+      clinical: {
+        dataset: {
+          table: {
+            headers: ['source_layer', 'subject_id', 'usubjid', 'domain_hint', 'source_var', 'derived_var', 'phi_risk'],
+            rows: [
+              ['raw', 'S001', 'TRAINING-S001', 'DM', 'subject_id', 'USUBJID', 'none'],
+              ['raw', 'S001', 'TRAINING-S001', 'VS', 'visit_date', 'VSDTC', 'none'],
+              ['raw', 'S002', 'TRAINING-S002', 'DM', 'group', 'ARM', 'none'],
+              ['metadata', '', '', 'define.xml', 'label/type/length', 'metadata contract', 'none'],
+              ['analysis', 'S003', 'TRAINING-S003', 'ADaM', 'score', 'AVAL', 'none']
+            ]
+          },
+          profiles: [
+            ['source_layer', 'clinical boundary', 100],
+            ['domain_hint', 'SDTM/ADaM cue', 95],
+            ['derived_var', 'traceability target', 90],
+            ['phi_risk', 'privacy gate', 100]
+          ]
+        }
+      },
+      report: {
+        dataset: {
+          table: {
+            headers: ['report_section', 'source_table', 'metric', 'value', 'footnote_needed', 'trace_source'],
+            rows: [
+              ['QC Summary', 'analysis_ready', 'row_count', '420', 'Y', 'PROC SQL count'],
+              ['QC Summary', 'analysis_ready', 'missing_score', '18', 'Y', 'PROC MEANS NMISS'],
+              ['Group Summary', 'analysis_ready', 'mean_score_A', '13.8', 'N', 'PROC REPORT'],
+              ['Log Review', 'run.log', 'warnings', '1', 'Y', 'scan_sas_log.py']
+            ]
+          },
+          profiles: [
+            ['report_section', 'ODS section', 90],
+            ['metric', 'reported number', 100],
+            ['footnote_needed', 'delivery caveat', 85],
+            ['trace_source', 'audit trail', 100]
+          ]
+        }
+      },
+      validate: {
+        dataset: {
+          table: {
+            headers: ['evidence_item', 'expected', 'actual', 'status', 'blocker'],
+            rows: [
+              ['SAS log ERROR', '0', '0', 'PASS', ''],
+              ['SAS log WARNING', '0 reviewed', '1 reviewed', 'WARN', 'format not found note reviewed'],
+              ['row count after transform', '420', '420', 'PASS', ''],
+              ['distinct subject_id', '210', '209', 'FAIL', 'duplicate subject visit key'],
+              ['runtime backend', 'SAS session', 'not configured', 'BLOCKED', 'requires SAS 9.4/OnDemand/Viya']
+            ]
+          },
+          profiles: [
+            ['evidence_item', 'validation target', 100],
+            ['actual', 'observed result', 90],
+            ['status', 'gate state', 100],
+            ['blocker', 'stop condition', 95]
+          ]
+        }
+      }
+    };
+
+    const codeLibrary = {
+      orient: {
+        dataset: `libname raw "data";\nlibname out "derived";\n\n/* First question: what is one row? */\nproc contents data=raw.source varnum;\nrun;\n\nproc print data=raw.source(obs=5);\nrun;`,
+        spec: `proc import datafile="metadata/dictionary.csv" out=work.source_spec dbms=csv replace;\n    getnames=yes;\nrun;\n\nproc contents data=work.source_spec varnum;\nrun;`,
+        database: `libname src odbc dsn="YOUR_DSN";\n\nproc sql outobs=20;\n    select libname, memname, name, type, length\n    from dictionary.columns\n    where libname="SRC"\n    order by memname, varnum;\nquit;`
+      },
+      library: {
+        dataset: `libname raw "data";\nlibname qc "reports/qc";\n\nproc datasets lib=raw nolist;\n    contents data=_all_;\nquit;`,
+        spec: `libname meta "metadata";\n\nproc import datafile="metadata/define_dictionary.xlsx" out=meta.spec dbms=xlsx replace;\n    getnames=yes;\nrun;`,
+        database: `libname src odbc dsn="YOUR_DSN" schema="training";\n\nproc contents data=src._all_ nods;\nrun;`
+      },
+      import: {
+        dataset: `proc import datafile="data/source.csv" out=work.source dbms=csv replace;\n    guessingrows=max;\n    getnames=yes;\nrun;\n\nproc contents data=work.source varnum;\nrun;`,
+        spec: `proc import datafile="metadata/dictionary.csv" out=work.source_spec dbms=csv replace;\n    guessingrows=max;\n    getnames=yes;\nrun;\n\nproc print data=work.source_spec(obs=10);\nrun;`,
+        database: `libname src odbc dsn="YOUR_DSN";\n\nproc sql outobs=10;\n    select *\n    from src.visits;\nquit;`
+      },
+      inspect: {
+        dataset: `proc contents data=work.source varnum out=work.columns noprint;\nrun;\n\nproc print data=work.source(obs=10);\nrun;\n\nproc print data=work.columns noobs;\n    var name type length label format informat;\nrun;`,
+        spec: `proc contents data=work.source out=work.actual_columns(keep=name type length label) noprint;\nrun;\n\nproc sql;\n    select s.variable, s.type as expected_type, a.type as actual_type,\n           s.length as expected_length, a.length as actual_length\n    from work.source_spec as s\n    left join work.actual_columns as a\n      on upcase(s.variable)=upcase(a.name);\nquit;`,
+        database: `proc sql outobs=20;\n    select name, type, length, format, label\n    from dictionary.columns\n    where libname="SRC" and memname="VISITS"\n    order by varnum;\nquit;`
+      },
+      transform: {
+        dataset: `data work.analysis_ready;\n    set work.source;\n    length age_group $8;\n    visit_dt = input(visit_date, yymmdd10.);\n    format visit_dt yymmdd10.;\n    if missing(score) then qc_missing_score=1;\n    if age < 40 then age_group="LT40";\n    else age_group="GE40";\nrun;`,
+        spec: `data work.required_spec;\n    set work.source_spec;\n    where required="Y";\n    variable = upcase(variable);\nrun;\n\nproc print data=work.required_spec;\nrun;`,
+        database: `data work.visits_subset;\n    set src.visits(where=(visit_date >= "01JAN2026"d));\n    if not missing(score);\nrun;`
+      },
+      summarize: {
+        dataset: `proc freq data=work.analysis_ready;\n    tables group age_group qc_missing_score / missing;\nrun;\n\nproc means data=work.analysis_ready n nmiss mean std min p25 median p75 max;\n    class group;\n    var age score;\nrun;`,
+        spec: `proc freq data=work.source_spec;\n    tables type required codelist / missing;\nrun;\n\nproc sql;\n    select type, count(*) as variable_count\n    from work.source_spec\n    group by type;\nquit;`,
+        database: `proc sql;\n    select group_name,\n           count(*) as row_count,\n           count(score) as nonmissing_score,\n           mean(score) as mean_score\n    from src.visits\n    group by group_name;\nquit;`
+      },
+      sortBy: {
+        dataset: `proc sort data=work.analysis_ready out=work.by_subject;\n    by subject_id visit_dt;\nrun;\n\ndata work.first_visit;\n    set work.by_subject;\n    by subject_id;\n    if first.subject_id;\nrun;\n\nproc sort data=work.analysis_ready nodupkey dupout=work.dup_subjects out=work.unique_subjects;\n    by subject_id visit_dt;\nrun;`,
+        spec: `proc sort data=work.source_spec out=work.spec_sorted nodupkey dupout=work.duplicate_spec_names;\n    by variable;\nrun;`,
+        database: `proc sql;\n    create table work.subject_visit_counts as\n    select subject_id, count(*) as visit_count\n    from src.visits\n    group by subject_id\n    having calculated visit_count > 1;\nquit;`
+      },
+      sql: {
+        dataset: `proc sql;\n    create table work.subject_summary as\n    select subject_id,\n           group,\n           count(*) as visit_count,\n           mean(score) as mean_score\n    from work.analysis_ready\n    group by subject_id, group;\nquit;`,
+        spec: `proc sql;\n    create table work.spec_gap as\n    select coalesce(s.variable, a.name) as variable length=32,\n           case\n             when a.name is null then "MISSING_IN_DATA"\n             when s.variable is null then "EXTRA_IN_DATA"\n             else "PRESENT"\n           end as qc_status\n    from work.source_spec as s\n    full join work.actual_columns as a\n      on upcase(s.variable)=upcase(a.name);\nquit;`,
+        database: `proc sql outobs=25;\n    select v.subject_id, v.visit_date, v.score, s.site_name\n    from src.visits as v\n    left join src.sites as s\n      on v.site_id = s.site_id\n    order by v.subject_id, v.visit_date;\nquit;`
+      },
+      clinical: {
+        dataset: `/* Raw to SDTM-style thinking: keep source, derivation, and QC separate. */\ndata work.dm_like;\n    set work.source;\n    studyid = "TRAINING";\n    usubjid = cats(studyid, "-", subject_id);\n    keep studyid usubjid site_id group age;\nrun;\n\nproc contents data=work.dm_like varnum;\nrun;`,
+        spec: `/* Define/spec validation before clinical mapping. */\nproc sql;\n    select variable, label, type, length, codelist\n    from work.source_spec\n    where required="Y"\n    order by variable;\nquit;`,
+        database: `/* Keep extracted raw data separate from derived clinical domains. */\nproc sql;\n    create table work.raw_visits as\n    select *\n    from src.visits\n    where study_id="TRAINING";\nquit;`
+      },
+      report: {
+        dataset: `ods html path="reports" file="qc_summary.html";\n\ntitle "QC Summary by Treatment Group";\nproc report data=work.analysis_ready nowd;\n    column group age score;\n    define group / group;\n    define age / analysis mean;\n    define score / analysis mean;\nrun;\n\nods html close;`,
+        spec: `ods html path="reports" file="spec_gap.html";\n\nproc report data=work.spec_gap nowd;\n    column variable qc_status;\n    define variable / display;\n    define qc_status / display;\nrun;\n\nods html close;`,
+        database: `ods html path="reports" file="database_extract_qc.html";\n\nproc report data=work.subject_visit_counts nowd;\n    column subject_id visit_count;\nrun;\n\nods html close;`
+      },
+      validate: {
+        dataset: `%put NOTE: After running this program, review the SAS log.;\n\nproc sql;\n    select count(*) as rows,\n           count(distinct subject_id) as distinct_subjects,\n           sum(missing(score)) as missing_score\n    from work.analysis_ready;\nquit;\n\n/* Runtime evidence: check for ERROR, WARNING, and suspicious NOTE messages. */`,
+        spec: `proc sql;\n    select qc_status, count(*) as count\n    from work.spec_gap\n    group by qc_status;\nquit;\n\n/* Evidence must include the SAS log and the spec gap table. */`,
+        database: `proc sql;\n    select count(*) as extracted_rows,\n           count(distinct subject_id) as subjects\n    from work.raw_visits;\nquit;\n\n/* Confirm extraction filters and credentials are documented outside the code. */`
+      }
+    };
+
+    const modules = [
+      {
+        id: 'orient',
+        title: '資料入口與學習目標',
+        subtitle: 'source type / grain / risk',
+        objective: '先判斷來源是 spec、dataset 還是 database，並說清楚一列資料代表什麼。',
+        flow: 'Orient',
+        refs: ['dataStep', 'import', 'sasCodeExamples', 'uclaModules'],
+        concepts: [
+          ['Source type', 'Dataset 有實際資料列；spec 是欄位契約；database 需要先界定 table 與抽樣策略。'],
+          ['Grain', '每一列代表 subject、visit、lab result 或 metadata row，會決定 key 和 QC 方法。'],
+          ['Evidence first', '從一開始就保留 row count、欄位數、log scan 和缺口清單。'],
+          ['Runtime boundary', '網站能教學和產生 skeleton，但 SAS runtime 還是要在 SAS session 執行。']
+        ],
+        tasks: ['指出來源類型與一列資料的意義。', '列出候選 key、日期欄位、類別欄位與數值欄位。', '寫下現在不能驗證的部分，例如 SAS backend、DSN、或真實資料缺口。'],
+        mistakes: ['看到 CSV 就直接分析，沒有先確認 row grain。', '把 data dictionary 當成真實資料值。', '對 database 直接 select * 全表。'],
+        checks: ['來源類型已標記', '資料 grain 已描述', '缺少的 runtime 條件已列出'],
+        quiz: [
+          { question: '只有 data dictionary，還沒有真實資料列時，第一個 QC 重點是什麼？', choices: ['先跑 PROC MEANS', '比對欄位 contract', '直接做 TLF'], answer: 1, feedback: '正確。Spec 先驗 metadata contract，不能假設資料值已存在。' },
+          { question: 'Database onboarding 的第一個安全動作是什麼？', choices: ['拉整張表', '先看 metadata 與 bounded sample', '先做 PROC REPORT'], answer: 1, feedback: '正確。Database 要先界定表、欄位、資料量和權限。' }
+        ]
+      },
+      {
+        id: 'library',
+        title: 'SAS Library 與資料位置',
+        subtitle: 'LIBNAME / WORK / permanent data',
+        objective: '理解 WORK 暫存表、永久 library、外部資料來源與輸出資料夾的差異。',
+        flow: 'Library',
+        refs: ['dataStep', 'learningByExample', 'procXGit'],
+        concepts: [
+          ['WORK', 'WORK 是 session 暫存 library，重開 session 後不保留。'],
+          ['LIBNAME', 'LIBNAME 把 SAS 名稱連到資料夾、資料庫或其他引擎。'],
+          ['Separation', 'raw、derived、reports 分開，教學和 QC 會更清楚。'],
+          ['Naming', '資料集名稱、欄位名稱要遵守 SAS 命名限制或使用 name literal。']
+        ],
+        tasks: ['建立 raw、derived、reports 的資料位置。', '用 PROC DATASETS 或 PROC CONTENTS 確認 library 內容。', '把產生的資料放進 work 或 derived，避免覆寫 raw。'],
+        mistakes: ['把原始資料直接覆寫。', '不知道 WORK 會隨 session 消失。', '把 database library 當成本機資料夾。'],
+        checks: ['LIBNAME 成功且 log 無 ERROR', 'raw 與 derived 沒混用', '輸出目的地已清楚標示'],
+        quiz: [
+          { question: 'WORK library 的主要特性是什麼？', choices: ['永久保存', 'session 暫存', '只能放 Excel'], answer: 1, feedback: '正確。WORK 是暫存區。' },
+          { question: '為什麼 raw 和 derived 要分開？', choices: ['避免覆寫來源並保留追溯性', '讓程式變短', '避免使用 PROC SQL'], answer: 0, feedback: '正確。可追溯性是資料教學和臨床流程的核心。' }
+        ]
+      },
+      {
+        id: 'import',
+        title: '匯入與建立 WORK.SOURCE',
+        subtitle: 'PROC IMPORT / bounded extract',
+        objective: '把外部來源變成穩定的 SAS table，並降低型別猜測、長度截斷與抽樣偏誤。',
+        flow: 'Import',
+        refs: ['import', 'informat', 'sasCodeExamples', 'learningByExample'],
+        concepts: [
+          ['PROC IMPORT', '適合初學者快速匯入 CSV、Excel 等外部檔案，但仍要檢查型別與長度。'],
+          ['GUESSINGROWS', 'CSV 型別猜測可能受前幾列影響，教學時要明確檢查結果。'],
+          ['Excel risk', '混合型別欄位可能被猜錯，匯入後必須看 PROC CONTENTS。'],
+          ['Database extract', 'Database 入口先用 outobs 或 where 限制資料量。']
+        ],
+        tasks: ['使用正確 DBMS 或 LIBNAME 引擎匯入。', '匯入後立刻跑 PROC CONTENTS。', '記錄 row count 與欄位數。'],
+        mistakes: ['匯入成功就當作正確。', '沒有檢查日期是否是 SAS date。', '忘記 getnames=yes 或匯入錯 worksheet。'],
+        checks: ['WORK.SOURCE 或 source_spec 已建立', 'log 沒有 ERROR', '匯入策略符合來源類型'],
+        quiz: [
+          { question: 'CSV 匯入時，為什麼常加入 guessingrows=max？', choices: ['增加圖表解析度', '降低型別猜測截斷風險', '自動刪除 missing'], answer: 1, feedback: '正確。它讓 SAS 用更多列判斷欄位型別與長度。' },
+          { question: 'PROC IMPORT 後最該立刻做什麼？', choices: ['PROC CONTENTS', 'PROC DELETE', 'ODS PDF'], answer: 0, feedback: '正確。先確認欄位 metadata。' }
+        ]
+      },
+      {
+        id: 'inspect',
+        title: '檢查欄位與前幾列',
+        subtitle: 'PROC CONTENTS / dictionary tables',
+        objective: '在轉換前確認欄位名稱、型別、長度、format、informat、label 與樣本列。',
+        flow: 'Inspect',
+        refs: ['dataStep', 'uclaModules', 'sasCodeExamples'],
+        concepts: [
+          ['PROC CONTENTS', '取得資料集 metadata，是初學者進入任何資料前的第一個檢查。'],
+          ['dictionary.columns', '適合跨 library 或 database table 查欄位清單。'],
+          ['OBS sample', 'PROC PRINT(obs=) 只能看樣本，不等於資料品質驗證完成。'],
+          ['Name mismatch', '大小寫、空白、底線和 name literal 都可能造成 spec 對不上。']
+        ],
+        tasks: ['輸出欄位清單到 work.columns。', '人工檢查前 10 列是否符合預期。', '比對 spec 與 actual columns。'],
+        mistakes: ['只看前幾列就推論整份資料。', '忽略 character length 截斷。', '沒有看 format/informat。'],
+        checks: ['PROC CONTENTS 已保存', '前 10 列已人工檢查', '日期與 ID 欄位已確認'],
+        quiz: [
+          { question: 'PROC CONTENTS 的主要教學價值是什麼？', choices: ['顯示 metadata', '建立資料庫連線', '產生隨機樣本'], answer: 0, feedback: '正確。初學者應先看 metadata，再動手寫 DATA step。' },
+          { question: 'dictionary.columns 最適合用在哪裡？', choices: ['查 library/table 欄位 metadata', '畫盒鬚圖', '壓縮圖片'], answer: 0, feedback: '正確。它可以查欄位名稱、型別、長度等 metadata。' }
+        ]
+      },
+      {
+        id: 'transform',
+        title: 'DATA Step 轉換',
+        subtitle: 'LENGTH / INPUT / IF / WHERE',
+        objective: '學會建立新欄位、轉日期、篩選列、處理 missing，並避免隱性型別轉換。',
+        flow: 'Transform',
+        refs: ['dataStep', 'where', 'ifStmt', 'informat', 'learningByExample'],
+        concepts: [
+          ['DATA step', '可建立變數、選列、改欄位、套用條件邏輯，是 SAS 資料轉換核心。'],
+          ['INPUT + informat', '文字日期要用 INPUT 搭配 informat 轉成 SAS date，再用 format 顯示。'],
+          ['WHERE vs IF', 'WHERE 在讀入前篩選；subsetting IF 在 DATA step 中處理後篩選。'],
+          ['Missing', 'numeric missing 是 .；character missing 是空白，兩者檢查方式不同。']
+        ],
+        tasks: ['明確 LENGTH 避免字串截斷。', '把字串日期轉成 SAS date。', '建立 QC flag 追蹤 missing 或不合理值。'],
+        mistakes: ['讓 SAS 自動 character/numeric 轉換。', '先使用變數才設定 LENGTH。', '把 IF 和 WHERE 的執行時機混在一起。'],
+        checks: ['轉換後 log 無型別轉換 NOTE', '日期欄位有正確 format', 'QC flag 被 PROC FREQ 檢查'],
+        quiz: [
+          { question: '字串日期轉 SAS date 常用哪個函數？', choices: ['input()', 'mean()', 'cats()'], answer: 0, feedback: '正確。input(value, informat.) 會把字串依 informat 解析。' },
+          { question: 'WHERE 和 subsetting IF 的主要差異是什麼？', choices: ['WHERE 讀入前篩選，IF 在 DATA step 中篩選', 'WHERE 只能用在 Excel', 'IF 只能用在 PROC SQL'], answer: 0, feedback: '正確。執行時機會影響效能與可用變數。' }
+        ]
+      },
+      {
+        id: 'summarize',
+        title: '摘要與異常值',
+        subtitle: 'PROC FREQ / PROC MEANS',
+        objective: '用類別分布和連續變數摘要找出 missing、極端值、不合理 category 與資料量問題。',
+        flow: 'Summarize',
+        refs: ['freq', 'uclaModules', 'learningByExample'],
+        concepts: [
+          ['PROC FREQ', '適合 category、flag、missing level、controlled terminology 檢查。'],
+          ['PROC MEANS', '適合 numeric 欄位的 N、NMISS、mean、median、min、max。'],
+          ['CLASS', '用 CLASS 依群組摘要，先確認群組欄位 level 合理。'],
+          ['QC before analysis', '摘要不是最終分析，而是進入分析前的品質閘。']
+        ],
+        tasks: ['類別欄位跑 PROC FREQ / missing。', '數值欄位跑 PROC MEANS n nmiss median min max。', '列出需要回查 source 的異常 level 或極端值。'],
+        mistakes: ['只看 mean 不看 N/NMISS。', '沒有使用 / missing，導致 missing level 被忽略。', '把 QC summary 當成正式統計報告。'],
+        checks: ['類別欄位有 PROC FREQ', '數值欄位有 N / NMISS', '異常值已列入待確認'],
+        quiz: [
+          { question: '類別欄位要檢查 missing level，最直接的 procedure 是？', choices: ['PROC FREQ', 'PROC SORT', 'PROC DATASETS'], answer: 0, feedback: '正確。PROC FREQ 搭配 / missing 是初學者最直接的 QC。' },
+          { question: '數值欄位 QC 不應只看哪個統計量？', choices: ['mean', 'nmiss', 'min'], answer: 0, feedback: '正確。只看平均會遮蔽 missing 與極端值問題。' }
+        ]
+      },
+      {
+        id: 'sortBy',
+        title: '排序、BY group 與重複 key',
+        subtitle: 'PROC SORT / FIRST. / LAST.',
+        objective: '理解 BY group 前必須排序，並用 NODUPKEY、DUPOUT 和 FIRST./LAST. 做 key 檢查。',
+        flow: 'Sort/BY',
+        refs: ['sort', 'byGroup', 'uclaModules', 'learningByExample'],
+        concepts: [
+          ['PROC SORT', 'BY processing 通常需要資料依 BY variables 排序。'],
+          ['FIRST./LAST.', 'DATA step BY group 會提供 FIRST.variable 和 LAST.variable 旗標。'],
+          ['NODUPKEY', '可產生唯一 key 輸出，但不應在沒審查前拿來靜默刪資料。'],
+          ['DUPOUT', '保留重複 key 供 QC review。']
+        ],
+        tasks: ['用 PROC SORT 依 key/date 排序。', '用 FIRST./LAST. 取每個 subject 的第一筆或最後一筆。', '用 DUPOUT 保存重複 key。'],
+        mistakes: ['沒排序就做 BY group。', '用 NODUPKEY 直接刪重複而不保存證據。', '以為 subject_id 在所有 grain 都必須唯一。'],
+        checks: ['BY variables 已排序', '重複 key 已輸出供審查', 'FIRST./LAST. 邏輯符合資料 grain'],
+        quiz: [
+          { question: '使用 FIRST.subject_id 前通常需要先做什麼？', choices: ['PROC SORT by subject_id', 'PROC REPORT', 'ODS CLOSE'], answer: 0, feedback: '正確。BY group 需要排序或合適的排序狀態。' },
+          { question: 'DUPOUT 的教學價值是什麼？', choices: ['保存重複 key 證據', '自動畫圖', '新增 format'], answer: 0, feedback: '正確。不要靜默刪除需要回查的重複資料。' }
+        ]
+      },
+      {
+        id: 'sql',
+        title: 'PROC SQL 查詢與 join',
+        subtitle: 'SELECT / GROUP BY / JOIN',
+        objective: '用 PROC SQL 做抽樣、彙總、join 與 spec gap table，同時注意 join key 和 row multiplication。',
+        flow: 'SQL',
+        refs: ['sqlJoin', 'uclaSql', 'sasCodeExamples'],
+        concepts: [
+          ['SELECT', 'PROC SQL 可讀 SAS data set 或 database table，適合查詢與彙總。'],
+          ['GROUP BY', '彙總前要確認 group level 和 row grain。'],
+          ['JOIN', 'Join 前要檢查 key 唯一性，否則可能 row multiplication。'],
+          ['Calculated fields', 'SQL 可建立衍生欄位，但要保留 derivation trace。']
+        ],
+        tasks: ['寫 bounded SELECT 或 outobs sample。', '做 group-level row count。', 'Join 前後比較 row count。'],
+        mistakes: ['Join 前沒查 key uniqueness。', 'GROUP BY 後選了非 group、非 aggregate 欄位。', 'Database 查詢沒有 outobs 或 where 限制。'],
+        checks: ['Join key 已檢查', 'Join 前後 row count 已保存', 'SQL log 無 remerge warning 或已解釋'],
+        quiz: [
+          { question: 'Join 前最重要的 QC 是什麼？', choices: ['確認 key 唯一性與 grain', '改字體大小', '先輸出 PDF'], answer: 0, feedback: '正確。Key 與 grain 決定 join 是否會放大列數。' },
+          { question: 'Database 教學查詢為何常用 outobs=10？', choices: ['限制樣本避免拉全表', '提高數值精度', '刪除重複列'], answer: 0, feedback: '正確。先做 bounded sample 是安全的 onboarding 步驟。' }
+        ]
+      },
+      {
+        id: 'clinical',
+        title: '臨床資料邊界',
+        subtitle: 'raw / SDTM / ADaM / TLF / define.xml',
+        objective: '建立 clinical SAS 的資料層級觀念：raw 不等於 SDTM，ADaM 不等於 TLF。',
+        flow: 'Clinical',
+        refs: ['dataStep', 'import', 'phuseScripts'],
+        concepts: [
+          ['Raw', '原始或訓練資料保留來源欄位和收集方式。'],
+          ['SDTM', '偏向標準化收集/觀察資料結構，例如 DM、AE、LB。'],
+          ['ADaM', '偏向分析資料集，強調 traceability、parameter、analysis value。'],
+          ['TLF/define', 'TLF 是輸出；define.xml 是 metadata exchange，不是資料列本身。']
+        ],
+        tasks: ['判斷目前資料位於 raw、SDTM、ADaM、TLF 或 define.xml 哪一層。', '保留 source 到 derived 的欄位 trace。', '避免用未去識別資料做教學。'],
+        mistakes: ['把 raw table 直接命名成 SDTM domain。', '缺少 derivation trace 就產生 TLF。', '在教學網站暴露 PHI/PII。'],
+        checks: ['臨床資料層級已標示', '沒有 PHI/PII', 'derivation trace 已列出'],
+        quiz: [
+          { question: 'define.xml 的角色最接近什麼？', choices: ['metadata exchange', '實際 lab result row', 'SAS log'], answer: 0, feedback: '正確。define.xml 是 metadata，不是分析資料本體。' },
+          { question: 'ADaM 的核心要求之一是什麼？', choices: ['traceability', '隨機改名欄位', '刪除所有來源欄位'], answer: 0, feedback: '正確。分析資料要能追溯來源與衍生邏輯。' }
+        ]
+      },
+      {
+        id: 'report',
+        title: '報表輸出與可讀交付',
+        subtitle: 'ODS / PROC REPORT',
+        objective: '把 QC 結果和摘要轉成可讀 HTML/PDF/RTF，讓教學結果能被審查。',
+        flow: 'Report',
+        refs: ['report', 'phuseScripts', 'sasCodeExamples'],
+        concepts: [
+          ['ODS', 'Output Delivery System 控制 HTML、PDF、RTF 等輸出目的地。'],
+          ['PROC REPORT', '適合整理 display、group、analysis 欄位與 QC table。'],
+          ['Title/footnote', '教學交付要標示資料來源、執行時間、限制。'],
+          ['Accessibility', '正式報表要注意標題、欄位名稱與可讀性。']
+        ],
+        tasks: ['建立 QC summary HTML。', '把 row count/spec gap/log scan 結果放進報告。', '在報告中列出未驗證 blocker。'],
+        mistakes: ['只交截圖，不交可重跑輸出。', '沒有標示資料日期或執行環境。', '報表數字沒有連到 QC evidence。'],
+        checks: ['ODS output 已產生', '報表含資料來源與限制', '數字可追到程式與 log'],
+        quiz: [
+          { question: 'ODS 的用途是什麼？', choices: ['控制輸出目的地', '連接藍牙', '刪除資料集'], answer: 0, feedback: '正確。ODS 管理 SAS procedure 的輸出格式。' },
+          { question: 'QC 報表最不該只包含什麼？', choices: ['漂亮表格但沒有證據命令', 'row count', 'log scan 狀態'], answer: 0, feedback: '正確。報表必須可追溯、可重跑。' }
+        ]
+      },
+      {
+        id: 'validate',
+        title: '交付證據與 log 審查',
+        subtitle: 'Log scan / row counts / blocker',
+        objective: '把 SAS 執行結果轉成可重跑、可審查的 evidence，而不是只看畫面。',
+        flow: 'Validate',
+        refs: ['dataStep', 'freq', 'sasCodeExamples', 'phuseScripts'],
+        concepts: [
+          ['ERROR', 'SAS log 中的 ERROR 必須修正，不能只看 output table。'],
+          ['WARNING', 'WARNING 可能代表 macro、format、merge、資料存取問題。'],
+          ['Suspicious NOTE', '型別轉換、missing 生成、uninitialized variable 都可能讓結果錯誤。'],
+          ['STOP rule', 'SAS backend、credentials 或敏感資料邊界不清楚時，不宣稱完成。']
+        ],
+        tasks: ['用 scan_sas_log.py 掃 SAS log。', '保存 row count、distinct key count、missing count。', '把未驗證的限制寫進交付。'],
+        mistakes: ['只要沒有 ERROR 就忽略 WARNING/NOTE。', '沒有保存 log。', '沒有比較執行前後 row count。'],
+        checks: ['SAS log 已用 scan_sas_log.py 掃描', 'row count 已對照', '完成邊界已寫入報告'],
+        quiz: [
+          { question: '看到 suspicious NOTE 時，正確處理是什麼？', choices: ['忽略 NOTE', '記錄並確認是否影響資料', '只要沒有 ERROR 就完成'], answer: 1, feedback: '正確。型別轉換、missing 生成、many-to-many merge 都可能改變結果。' },
+          { question: '什麼情況不能宣稱教學 workflow 已完成 runtime 驗證？', choices: ['沒有 SAS backend 或 log', '有 PROC CONTENTS', '有 README'], answer: 0, feedback: '正確。沒有執行環境和 log，就只能說 code generation 已驗證。' }
+        ]
+      }
+    ];
+
+    let activeModule = modules[0].id;
+    let activeSource = 'dataset';
+    const completed = new Set(JSON.parse(localStorage.getItem('sasTutorCompleted') || '[]'));
+
+    const moduleList = document.getElementById('module-list');
+    const sampleTable = document.getElementById('sample-table');
+    const profileBars = document.getElementById('profile-bars');
+    const codeBox = document.getElementById('sas-code');
+    const compileStatus = document.getElementById('compile-status');
+    const compileSummary = document.getElementById('compile-summary');
+    const compileLog = document.getElementById('compile-log');
+    const printOutput = document.getElementById('print-output');
+    let lastCompileResult = null;
+
+    function saveProgress() {
+      localStorage.setItem('sasTutorCompleted', JSON.stringify([...completed]));
+      document.getElementById('progress-label').textContent = `${completed.size} / ${modules.length} 完成`;
+    }
+
+    function currentModule() {
+      return modules.find((module) => module.id === activeModule) || modules[0];
+    }
+
+    function currentCode(module) {
+      return (codeLibrary[module.id] && codeLibrary[module.id][activeSource]) || codeLibrary.orient[activeSource];
+    }
+
+    function currentPractice(module, source) {
+      return (lessonPractice[module.id] && lessonPractice[module.id][source])
+        || sourceProfiles[source];
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
+
+    function stripSasComments(code) {
+      return code
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/^\s*\*[^;]*;\s*$/gm, '');
+    }
+
+    function countMatches(text, regex) {
+      return (text.match(regex) || []).length;
+    }
+
+    function compileSasCode(code, module) {
+      const clean = stripSasComments(code);
+      const lower = clean.toLowerCase();
+      const issues = [];
+      const warnings = [];
+      const notes = [];
+
+      if (!clean.trim()) {
+        issues.push('程式是空的，SAS session 沒有可提交的 statement。');
+      }
+      if (/[；]/.test(code)) {
+        issues.push('偵測到全形分號「；」。SAS statement terminator 必須使用半形分號「;」。');
+      }
+      if (/[“”‘’]/.test(code)) {
+        issues.push('偵測到智慧引號。SAS 字串建議使用一般單引號或雙引號。');
+      }
+      if (!/;\s*$/.test(clean.trim())) {
+        issues.push('最後一個 SAS statement 沒有以半形分號結尾。');
+      }
+      if (!/\b(run|quit)\s*;/i.test(clean)) {
+        issues.push('未偵測到 RUN; 或 QUIT;。DATA step 與多數 PROC step 需要明確結束。');
+      }
+
+      const procSqlCount = countMatches(lower, /\bproc\s+sql\b/g);
+      const quitCount = countMatches(lower, /\bquit\s*;/g);
+      if (procSqlCount > quitCount) {
+        issues.push('PROC SQL step 應以 QUIT; 結束，不能只依賴 RUN;。');
+      }
+
+      if (/\bproc\s+import\b/i.test(clean)) {
+        if (!/\bout\s*=/i.test(clean)) issues.push('PROC IMPORT 需要 OUT= 指定輸出的 SAS data set。');
+        if (!/\bdbms\s*=/i.test(clean)) warnings.push('PROC IMPORT 建議明確指定 DBMS=，避免來源格式判斷不清。');
+      }
+      if (/\bproc\s+sort\b/i.test(clean) && !/\bby\s+[^;]+;/i.test(clean)) {
+        issues.push('PROC SORT 需要 BY statement 才能定義排序 key。');
+      }
+      if (/\b(first|last)\.[a-z_][a-z0-9_]*/i.test(clean)) {
+        if (!/\bby\s+[^;]+;/i.test(clean)) issues.push('使用 FIRST./LAST. 前需要 DATA step BY statement。');
+        if (!/\bproc\s+sort\b/i.test(clean)) warnings.push('FIRST./LAST. 依賴 BY group；若資料未預先排序，結果可能錯誤。');
+      }
+      if (/\bproc\s+freq\b/i.test(clean) && !/\btables\s+[^;]+;/i.test(clean)) {
+        issues.push('PROC FREQ 需要 TABLES statement 指定要摘要的欄位。');
+      }
+      if (/\bproc\s+means\b/i.test(clean) && !/\bvar\s+[^;]+;/i.test(clean)) {
+        warnings.push('PROC MEANS 建議明確 VAR 欄位，避免把不該摘要的 numeric 欄位一起納入。');
+      }
+      if (/\bproc\s+contents\b/i.test(clean) && !/\bdata\s*=/i.test(clean)) {
+        issues.push('PROC CONTENTS 需要 DATA= 指定要檢查的資料集。');
+      }
+      if (/\bproc\s+report\b/i.test(clean) && !/\bcolumn\s+[^;]+;/i.test(clean)) {
+        warnings.push('PROC REPORT 建議明確 COLUMN statement，報表欄位才可審查。');
+      }
+      if (/\bselect\s+\*/i.test(clean) && !/\b(outobs|where)\b/i.test(clean)) {
+        warnings.push('SELECT * 應搭配 OUTOBS= 或 WHERE 做 bounded sample，尤其是 database 入口。');
+      }
+
+      if (issues.length === 0) {
+        notes.push('NOTE: 教學編譯檢查完成。未偵測到會阻擋 SAS step 結束的語法問題。');
+        notes.push(`NOTE: Current lesson=${module.title}; source=${activeSource}.`);
+        notes.push('NOTE: 這是靜態教學檢查，不等同於 SAS 9.4/OnDemand/Viya runtime execution。');
+      }
+
+      const logLines = [
+        ...issues.map((issue) => `ERROR: ${issue}`),
+        ...warnings.map((warning) => `WARNING: ${warning}`),
+        ...notes
+      ];
+      return {
+        ok: issues.length === 0,
+        hasWarnings: warnings.length > 0,
+        issues,
+        warnings,
+        log: logLines.join('\n')
+      };
+    }
+
+    function expectedOutput(module, source) {
+      const profile = currentPractice(module, source);
+      if (module.id === 'summarize') {
+        return {
+          title: source === 'spec' ? 'PROC FREQ type/required' : 'QC Summary',
+          headers: source === 'spec' ? ['type', 'required', 'count'] : ['group', 'n', 'missing_score', 'mean_score'],
+          rows: source === 'spec' ? [['char', 'Y', 2], ['date', 'Y', 1], ['num', 'N', 1]] : [['A', 2, 0, 13.85], ['B', 1, 1, '.'], ['C', 1, 0, 18.9]],
+          note: '摘要結果用來檢查資料分布與 missing，不是正式統計結論。'
+        };
+      }
+      if (module.id === 'sortBy') {
+        return {
+          title: 'FIRST./LAST. BY-group output',
+          headers: ['subject_id', 'visit_dt', 'selected_row', 'dupout_rows'],
+          rows: [['S001', '2026-01-02', 'first.subject_id=1', 0], ['S002', '2026-01-03', 'first.subject_id=1', 0], ['S003', '2026-01-04', 'first.subject_id=1', 0]],
+          note: 'BY group 結果依排序 key 產生；若 key grain 改變，這張表也應改變。'
+        };
+      }
+      if (module.id === 'sql') {
+        return {
+          title: source === 'database' ? 'Joined bounded sample' : 'Subject summary',
+          headers: source === 'database' ? ['subject_id', 'visit_date', 'score', 'site_name'] : ['subject_id', 'group', 'visit_count', 'mean_score'],
+          rows: source === 'database' ? [['S001', '2026-01-02', 12.5, 'North'], ['S002', '2026-01-03', '.', 'North'], ['S003', '2026-01-04', 15.2, 'South']] : [['S001', 'A', 1, 12.5], ['S002', 'B', 1, '.'], ['S003', 'A', 1, 15.2]],
+          note: 'Join 或 group by 前後要保存 row count，避免 key grain 錯誤。'
+        };
+      }
+      if (module.id === 'transform') {
+        return {
+          title: 'work.analysis_ready',
+          headers: ['subject_id', 'visit_dt', 'age_group', 'qc_missing_score'],
+          rows: [['S001', '2026-01-02', 'LT40', 0], ['S002', '2026-01-03', 'GE40', 1], ['S003', '2026-01-04', 'LT40', 0]],
+          note: '日期應是 SAS date 並用 FORMAT 顯示；missing flag 應再用 PROC FREQ 檢查。'
+        };
+      }
+      if (module.id === 'clinical') {
+        return {
+          title: 'DM-like derived table',
+          headers: ['studyid', 'usubjid', 'site_id', 'group', 'age'],
+          rows: [['TRAINING', 'TRAINING-S001', 101, 'A', 34], ['TRAINING', 'TRAINING-S002', 101, 'B', 41], ['TRAINING', 'TRAINING-S003', 102, 'A', 29]],
+          note: '這只是 SDTM-style thinking，不代表已符合 CDISC submission。'
+        };
+      }
+      if (module.id === 'report') {
+        return {
+          title: 'ODS delivery',
+          headers: ['file', 'table', 'status'],
+          rows: [['reports/qc_summary.html', 'QC Summary by Treatment Group', 'created'], ['SAS log', 'ERROR/WARNING scan', 'required']],
+          note: '報表交付應附程式、log scan 與資料限制。'
+        };
+      }
+      if (module.id === 'validate') {
+        return {
+          title: 'Evidence counts',
+          headers: ['metric', 'value'],
+          rows: [['rows', 4], ['distinct_subjects', 4], ['missing_score', 1], ['log_errors', 0]],
+          note: '沒有真實 SAS log 時，只能宣稱教學檢查通過，不能宣稱 runtime 驗證完成。'
+        };
+      }
+      return {
+        title: `${profile.label} sample`,
+        headers: profile.table.headers,
+        rows: profile.table.rows,
+        note: module.id === 'inspect' ? '這張表代表 PROC CONTENTS/PROC PRINT 後應人工審查的重點。' : '練習資料提供目前課程的最小輸入樣本。'
+      };
+    }
+
+    function renderOutputTable(result) {
+      const header = `<thead><tr>${result.headers.map((head) => `<th>${escapeHtml(head)}</th>`).join('')}</tr></thead>`;
+      const rows = result.rows.map((row) => `<tr>${row.map((cell) => `<td>${cell === '' ? '<span class="muted">missing</span>' : escapeHtml(cell)}</td>`).join('')}</tr>`).join('');
+      return `<strong>${escapeHtml(result.title)}</strong>
+        <div class="output-table-wrap">
+          <table class="output-table">${header}<tbody>${rows}</tbody></table>
+        </div>
+        <p class="small-note">${escapeHtml(result.note)}</p>`;
+    }
+
+    function setCompileResult(result) {
+      compileStatus.className = `status-pill ${result.ok ? (result.hasWarnings ? 'warn' : 'ok') : 'fail'}`;
+      compileStatus.textContent = result.ok ? (result.hasWarnings ? '可執行但需審查' : '編譯檢查通過') : '編譯檢查未通過';
+      compileSummary.textContent = result.ok
+        ? '靜態 SAS 原則檢查完成，可列印本課預期結果。'
+        : '請先修正 SAS log 中的 ERROR。';
+      compileLog.textContent = result.log;
+    }
+
+    function resetRunOutput() {
+      lastCompileResult = null;
+      compileStatus.className = 'status-pill';
+      compileStatus.textContent = '尚未編譯';
+      compileSummary.textContent = '等待 SAS 程式檢查。';
+      compileLog.textContent = '按下「編譯檢查」後會顯示教學用 SAS log。';
+      printOutput.innerHTML = '<p class="small-note">按下「列印結果」後會顯示本課的預期表格。</p>';
+    }
+
+    function renderModules() {
+      moduleList.innerHTML = modules.map((module, index) => {
+        const done = completed.has(module.id) ? '完成' : module.subtitle;
+        return `<button class="module-button" type="button" data-module="${module.id}" aria-current="${module.id === activeModule}">
+          <span class="step-index">${index + 1}</span>
+          <span><span class="module-title">${module.title}</span><span class="module-subtitle">${done}</span></span>
+        </button>`;
+      }).join('');
+    }
+
+    function renderTable(profile) {
+      const header = `<thead><tr>${profile.table.headers.map((head) => `<th>${escapeHtml(head)}</th>`).join('')}</tr></thead>`;
+      const rows = profile.table.rows.map((row) => `<tr>${row.map((cell) => `<td>${cell ? escapeHtml(cell) : '<span class="muted">missing</span>'}</td>`).join('')}</tr>`).join('');
+      sampleTable.innerHTML = `${header}<tbody>${rows}</tbody>`;
+    }
+
+    function renderBars(profile) {
+      profileBars.innerHTML = profile.profiles.map(([name, role]) => `<div class="bar-row">
+        <span>${escapeHtml(name)}</span>
+        <strong>${escapeHtml(role)}</strong>
+      </div>`).join('');
+    }
+
+    function renderLessonNotes(module) {
+      document.getElementById('concept-grid').innerHTML = module.concepts.map(([title, text]) => `<div class="note-box">
+        <strong>${escapeHtml(title)}</strong>
+        <p>${escapeHtml(text)}</p>
+      </div>`).join('');
+      document.getElementById('task-list').innerHTML = module.tasks.map((task) => `<li>${escapeHtml(task)}</li>`).join('');
+      document.getElementById('mistake-list').innerHTML = module.mistakes.map((mistake) => `<li>${escapeHtml(mistake)}</li>`).join('');
+    }
+
+    function render() {
+      const module = currentModule();
+      const sourceMeta = sourceProfiles[activeSource];
+      const profile = currentPractice(module, activeSource);
+      document.getElementById('lesson-title').textContent = module.title;
+      document.getElementById('lesson-objective').textContent = module.objective;
+      document.getElementById('source-pill').textContent = sourceMeta.label;
+      codeBox.value = currentCode(module);
+      renderModules();
+      renderTable(profile);
+      renderBars(profile);
+      renderLessonNotes(module);
+      resetRunOutput();
+      saveProgress();
+      document.querySelectorAll('.chip').forEach((chip) => {
+        chip.setAttribute('aria-pressed', String(chip.dataset.source === activeSource));
+      });
+    }
+
+    moduleList.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-module]');
+      if (!button) return;
+      activeModule = button.dataset.module;
+      render();
+    });
+
+    document.querySelector('.source-switcher').addEventListener('click', (event) => {
+      const button = event.target.closest('[data-source]');
+      if (!button) return;
+      activeSource = button.dataset.source;
+      render();
+    });
+
+    document.getElementById('mark-complete').addEventListener('click', () => {
+      completed.add(activeModule);
+      saveProgress();
+      renderModules();
+    });
+
+    document.getElementById('reset-progress').addEventListener('click', () => {
+      completed.clear();
+      localStorage.removeItem('sasTutorCompleted');
+      render();
+    });
+
+    document.getElementById('reset-code').addEventListener('click', () => {
+      codeBox.value = currentCode(currentModule());
+      resetRunOutput();
+    });
+
+    codeBox.addEventListener('input', () => {
+      lastCompileResult = null;
+      compileStatus.className = 'status-pill warn';
+      compileStatus.textContent = '程式已修改';
+      compileSummary.textContent = '請重新執行編譯檢查。';
+    });
+
+    document.getElementById('compile-code').addEventListener('click', () => {
+      lastCompileResult = compileSasCode(codeBox.value, currentModule());
+      setCompileResult(lastCompileResult);
+      if (!lastCompileResult.ok) {
+        printOutput.innerHTML = '<p class="small-note">編譯檢查未通過，暫不列印預期結果。</p>';
+      }
+    });
+
+    document.getElementById('print-result').addEventListener('click', () => {
+      if (!lastCompileResult) {
+        lastCompileResult = compileSasCode(codeBox.value, currentModule());
+        setCompileResult(lastCompileResult);
+      }
+      if (!lastCompileResult.ok) {
+        printOutput.innerHTML = '<p class="small-note">請先修正 SAS log 中的 ERROR，再列印結果。</p>';
+        return;
+      }
+      printOutput.innerHTML = renderOutputTable(expectedOutput(currentModule(), activeSource));
+    });
+
+    document.getElementById('copy-code').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(codeBox.value);
+        document.getElementById('copy-code').textContent = '已複製';
+        setTimeout(() => {
+          document.getElementById('copy-code').textContent = '複製程式';
+        }, 1400);
+      } catch (_error) {
+        codeBox.focus();
+        codeBox.select();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

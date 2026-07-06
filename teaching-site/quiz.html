@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAS Tutor Quiz Lab</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f4f6f8;
+      --surface: #ffffff;
+      --ink: #17202a;
+      --muted: #5d6875;
+      --line: #d8dde5;
+      --accent: #1f6f8b;
+      --accent-soft: #e5f3f7;
+      --green: #146c43;
+      --green-soft: #e7f4ed;
+      --amber: #936000;
+      --amber-soft: #fff2cd;
+      --red: #b42318;
+      --red-soft: #fde8e7;
+      --code: #111827;
+      --code-bg: #eef2f6;
+      --chrome: #eef1f5;
+      --nav: #f8fafc;
+      --tab: #f5f7fa;
+      --shadow: 0 1px 2px rgba(16, 24, 40, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    code,
+    pre,
+    textarea {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 9px 14px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: 0;
+      flex: 0 0 auto;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .button {
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+    }
+
+    .button.secondary {
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .workspace {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 0;
+      padding: 0;
+      min-height: calc(100vh - 53px);
+      background: var(--chrome);
+    }
+
+    .sidebar,
+    .studio-main,
+    .editor-pane,
+    .task-pane,
+    .output-pane {
+      min-width: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+
+    .sidebar {
+      align-self: stretch;
+      border-top: 0;
+      border-left: 0;
+      border-bottom: 0;
+      border-radius: 0;
+      background: var(--nav);
+      box-shadow: none;
+    }
+
+    .section-head {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: .88rem;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .explorer-block {
+      padding: 10px 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .explorer-title {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .tree-list {
+      display: grid;
+      gap: 2px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .tree-item {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 5px;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 4px;
+    }
+
+    .tree-item strong {
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .module-list {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .module-button {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      min-height: 58px;
+      padding: 8px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink);
+      text-align: left;
+    }
+
+    .module-button[aria-current="true"] {
+      border-color: rgba(31, 111, 139, .45);
+      background: var(--accent-soft);
+    }
+
+    .step-index {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--code-bg);
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .module-button[aria-current="true"] .step-index {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .module-title {
+      display: block;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .module-subtitle {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.25;
+    }
+
+    .studio-main {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) minmax(190px, .34fr);
+      gap: 0;
+      border-top: 0;
+      border-right: 0;
+      border-bottom: 0;
+      border-radius: 0;
+      box-shadow: none;
+      min-height: calc(100vh - 53px);
+    }
+
+    .studio-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+
+    .toolbar-title {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 800;
+    }
+
+    .studio-grid {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(460px, 1fr) minmax(390px, 430px);
+      gap: 0;
+    }
+
+    .editor-pane,
+    .task-pane,
+    .output-pane {
+      border-top: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .editor-pane {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      border-left: 0;
+      border-bottom: 0;
+    }
+
+    .task-pane {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      border-right: 0;
+      border-bottom: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .pane-tabs {
+      min-height: 35px;
+      display: flex;
+      align-items: end;
+      gap: 2px;
+      padding: 0 8px;
+      border-bottom: 1px solid var(--line);
+      background: var(--tab);
+    }
+
+    .studio-tab {
+      min-height: 31px;
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      border-radius: 6px 6px 0 0;
+      background: #ffffff;
+      color: var(--ink);
+      font-size: .82rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .studio-tab.inactive {
+      background: #f3f6f9;
+      color: var(--muted);
+    }
+
+    .editor-panels {
+      min-height: 0;
+      display: grid;
+    }
+
+    .editor-panel,
+    .task-panel {
+      display: none;
+    }
+
+    .editor-panel.active,
+    .task-panel.active {
+      display: block;
+    }
+
+    .pane-body {
+      min-height: 0;
+      overflow: auto;
+      padding: 12px;
+    }
+
+    .task-pane h2 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+    }
+
+    .task-pane h3 {
+      margin: 14px 0 8px;
+      font-size: .86rem;
+      letter-spacing: 0;
+    }
+
+    .case-text {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .question-list,
+    .choice-list,
+    .check-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .question-card {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+    }
+
+    .question-card p {
+      margin: 0 0 8px;
+      font-weight: 800;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 34px;
+      padding: 7px 8px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #ffffff;
+      color: var(--ink);
+      text-align: left;
+    }
+
+    .choice.correct {
+      border-color: rgba(20, 108, 67, .55);
+      background: var(--green-soft);
+    }
+
+    .choice.incorrect {
+      border-color: rgba(180, 35, 24, .55);
+      background: var(--red-soft);
+    }
+
+    .choice.selected {
+      border-color: rgba(31, 111, 139, .45);
+      background: var(--accent-soft);
+    }
+
+    .scorebar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 8px;
+      border-radius: 5px;
+      background: #fbfcfd;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .code-editor {
+      width: 100%;
+      height: 100%;
+      min-height: 360px;
+      padding: 14px;
+      border: 0;
+      background: var(--code-bg);
+      color: var(--code);
+      line-height: 1.45;
+      font-size: .9rem;
+      resize: vertical;
+      outline: 0;
+    }
+
+    .property-list {
+      display: grid;
+      grid-template-columns: minmax(110px, .45fr) minmax(0, 1fr);
+      gap: 6px 10px;
+      margin: 0;
+      font-size: .84rem;
+    }
+
+    .property-list dt {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .property-list dd {
+      margin: 0;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .required-list {
+      display: grid;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .required-item {
+      padding: 7px 8px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #ffffff;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 800;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #ffffff;
+    }
+
+    .check-dot {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--code-bg);
+      color: var(--muted);
+      font-weight: 900;
+      font-size: .78rem;
+    }
+
+    .check-item.ok .check-dot {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .check-item.fail .check-dot {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .log-lines {
+      height: 100%;
+      min-height: 120px;
+      margin: 0;
+      padding: 10px;
+      border-radius: 0;
+      background: var(--code-bg);
+      color: var(--code);
+      overflow: auto;
+      white-space: pre-wrap;
+      font-size: .82rem;
+      line-height: 1.42;
+    }
+
+    .output-pane {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
+    }
+
+    .output-panel {
+      min-height: 0;
+      display: none;
+      overflow: auto;
+    }
+
+    .output-panel.active {
+      display: block;
+    }
+
+    .result-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .result-card {
+      min-height: 70px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+    }
+
+    .result-card strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: .84rem;
+    }
+
+    .result-card span {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .small-note {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    @media (max-width: 1180px) {
+      .workspace {
+        grid-template-columns: 220px minmax(0, 1fr);
+      }
+
+      .studio-grid {
+        grid-template-columns: minmax(360px, 1fr) minmax(320px, 360px);
+      }
+
+      .code-editor {
+        min-height: 320px;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .studio-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .task-pane {
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace,
+      .studio-main {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">SAS</div>
+      <div>
+        <h1>SAS Tutor Quiz Lab</h1>
+        <p>案例題與程式碼簡答檢查</p>
+      </div>
+    </div>
+    <a class="button secondary" href="index.html">返回課程工作區</a>
+  </header>
+
+  <main class="workspace">
+    <aside class="sidebar" aria-label="測驗課程">
+      <div class="section-head">
+        <h2>Explorer</h2>
+        <p id="progress-label">0 / 11 完成</p>
+      </div>
+      <div class="explorer-block">
+        <p class="explorer-title">Server Files and Folders</p>
+        <div class="tree-list">
+          <div class="tree-item"><span>▸</span><strong>WORK</strong></div>
+          <div class="tree-item"><span>▸</span><span>work.source</span></div>
+          <div class="tree-item"><span>▸</span><span>work.analysis_ready</span></div>
+          <div class="tree-item"><span>▸</span><span>reports/qc</span></div>
+        </div>
+      </div>
+      <div class="explorer-block">
+        <p class="explorer-title">Lessons</p>
+      </div>
+      <nav class="module-list" id="module-list"></nav>
+    </aside>
+
+    <section class="studio-main">
+      <div class="studio-toolbar">
+        <button class="button secondary" type="button" id="load-starter">載入題目骨架</button>
+        <button class="button" type="button" id="check-answer">檢查答案</button>
+        <button class="button secondary" type="button" id="clear-code">清除</button>
+        <span class="toolbar-title">Program.sas</span>
+      </div>
+
+      <div class="studio-grid">
+        <section class="editor-pane" aria-label="Program editor">
+          <div class="pane-tabs">
+            <button class="studio-tab" type="button" data-program-tab="answer" aria-pressed="true">Program 1.sas</button>
+            <button class="studio-tab inactive" type="button" data-program-tab="scratch" aria-pressed="false">Program 2.sas</button>
+          </div>
+          <div class="editor-panels">
+            <textarea class="code-editor editor-panel active" id="short-answer-code" spellcheck="false"></textarea>
+            <textarea class="code-editor editor-panel" id="scratch-code" spellcheck="false" placeholder="Program 2.sas 是草稿區，不會被檢查答案使用。"></textarea>
+          </div>
+        </section>
+
+        <aside class="task-pane" aria-label="Tasks and questions">
+          <div class="pane-tabs">
+            <button class="studio-tab" type="button" data-task-tab="tasks" aria-pressed="true">Tasks</button>
+            <button class="studio-tab inactive" type="button" data-task-tab="properties" aria-pressed="false">Properties</button>
+          </div>
+          <div class="pane-body task-panel active" id="tasks-panel">
+            <h2 id="quiz-title"></h2>
+            <p class="case-text" id="case-text"></p>
+            <h3>題目</h3>
+            <div class="question-list" id="question-list"></div>
+            <div class="scorebar">
+              <span id="choice-score">0 / 0 答對</span>
+              <span id="choice-status">尚未完成</span>
+              <button class="button" type="button" id="check-answer-inline">檢查答案</button>
+            </div>
+            <h3>程式碼作答題</h3>
+            <p class="case-text" id="code-prompt"></p>
+            <p class="small-note">此頁檢查教學重點與 SAS coding pattern；真實執行仍需 SAS 9.4、SAS OnDemand 或 SAS Viya。</p>
+          </div>
+          <div class="pane-body task-panel" id="properties-panel">
+            <h2>Properties</h2>
+            <dl class="property-list" id="property-list"></dl>
+            <h3>檢查規則</h3>
+            <div class="required-list" id="required-list"></div>
+          </div>
+        </aside>
+      </div>
+
+      <section class="output-pane" aria-label="Log, Results, and checks">
+        <div class="pane-tabs" role="tablist" aria-label="Output tabs">
+          <button class="studio-tab" type="button" data-output-tab="log" aria-pressed="true">Log</button>
+          <button class="studio-tab inactive" type="button" data-output-tab="results" aria-pressed="false">Results</button>
+          <button class="studio-tab inactive" type="button" data-output-tab="checks" aria-pressed="false">Checks</button>
+        </div>
+        <div class="output-panel active" id="log-panel">
+          <pre class="log-lines" id="code-log">輸入 SAS 程式後按「提交 / 檢查」。</pre>
+        </div>
+        <div class="output-panel" id="results-panel">
+          <div class="result-summary" id="result-summary"></div>
+        </div>
+        <div class="output-panel pane-body" id="checks-panel">
+          <div class="check-list" id="code-checks"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const quizBank = [
+      {
+        id: 'orient',
+        title: '資料入口與學習目標',
+        subtitle: 'source type / grain',
+        caseText: '你拿到三個來源：raw_visits.csv、lab_dictionary.xlsx、EDC database table。要先決定每個來源的 row grain 與可驗證邊界。',
+        questions: [
+          {
+            question: '哪一個判斷最適合作為 onboarding 的第一步？',
+            choices: ['直接用 PROC MEANS 分析 score', '先標記 source type、row grain、candidate key 與 blocker', '先把所有來源 join 成一張表', '先輸出 PDF 報表'],
+            answer: 1,
+            explain: 'onboarding 的第一步是界定來源和 grain，否則後面的 key、join、QC 都沒有基準。'
+          },
+          {
+            question: '只有 data dictionary，沒有真實資料列時，哪個說法正確？',
+            choices: ['可以宣稱 missing rate 已檢查', '只能檢查欄位 contract，不能推論資料分布', '可以直接做 TLF', '應該先刪掉非必要欄位'],
+            answer: 1,
+            explain: 'spec 是 metadata contract，不包含資料值分布。'
+          }
+        ],
+        codePrompt: '寫一段 SAS 程式，至少用 PROC CONTENTS 檢查 raw.source，並用 PROC PRINT(obs=5) 看 bounded sample。',
+        starter: 'proc contents data=raw.source varnum;\nrun;\n\n',
+        required: [
+          ['PROC CONTENTS', /proc\s+contents/i],
+          ['DATA=raw.source', /data\s*=\s*raw\.source/i],
+          ['VARNUM', /\bvarnum\b/i],
+          ['PROC PRINT bounded sample', /proc\s+print[\s\S]*obs\s*=\s*5/i],
+          ['RUN terminator', /\brun\s*;/i]
+        ]
+      },
+      {
+        id: 'library',
+        title: 'SAS Library 與資料位置',
+        subtitle: 'LIBNAME / WORK',
+        caseText: 'RAW 要保留來源，DERIVED 放轉換結果，QC 放檢查輸出。學員需要判斷哪些 table 可以覆寫，哪些不可以。',
+        questions: [
+          {
+            question: '哪個做法最符合可追溯性？',
+            choices: ['把轉換結果覆寫 RAW.source', 'RAW read-only，DERIVED/QC 分開輸出', '所有資料都放 WORK 不保留', '只用 Excel 備份'],
+            answer: 1,
+            explain: 'source、derived、QC 分開，才可追蹤資料生命週期。'
+          },
+          {
+            question: 'WORK library 的主要風險是什麼？',
+            choices: ['session 結束後資料不保留', '不能跑 PROC CONTENTS', '只能存文字檔', '一定會覆寫 raw data'],
+            answer: 0,
+            explain: 'WORK 是暫存區，適合 scratch，不適合作永久交付。'
+          }
+        ],
+        codePrompt: '宣告 RAW、DERIVED、QC 三個 library，並用 PROC DATASETS 或 PROC CONTENTS 檢查 RAW 內容。',
+        starter: 'libname raw "data/raw";\nlibname derived "data/derived";\nlibname qc "reports/qc";\n\n',
+        required: [
+          ['LIBNAME RAW', /libname\s+raw\b/i],
+          ['LIBNAME DERIVED', /libname\s+derived\b/i],
+          ['LIBNAME QC', /libname\s+qc\b/i],
+          ['library contents check', /proc\s+(datasets|contents)/i],
+          ['RUN or QUIT terminator', /\b(run|quit)\s*;/i]
+        ]
+      },
+      {
+        id: 'import',
+        title: '匯入與建立 WORK.SOURCE',
+        subtitle: 'PROC IMPORT',
+        caseText: 'CSV 裡有混合日期格式、空白 score、以及 score 帶單位字串。匯入成功不代表型別正確。',
+        questions: [
+          {
+            question: 'PROC IMPORT 後最該立刻做哪個檢查？',
+            choices: ['PROC CONTENTS 確認 type/length/format', 'PROC DELETE 清掉 WORK', 'ODS PDF', '直接 PROC REPORT'],
+            answer: 0,
+            explain: '匯入後先查 metadata，才知道型別與長度是否符合預期。'
+          },
+          {
+            question: 'guessingrows=max 的主要目的最接近哪一個？',
+            choices: ['降低型別猜測偏差', '自動修正 invalid date', '建立 primary key', '刪除 missing score'],
+            answer: 0,
+            explain: '它讓 SAS 用更多列判斷欄位型別與長度，但不會自動修正資料品質。'
+          }
+        ],
+        codePrompt: '用 PROC IMPORT 將 data/source.csv 匯入 work.source，需包含 DBMS=CSV、REPLACE、GETNAMES=YES、GUESSINGROWS=MAX，並接 PROC CONTENTS。',
+        starter: 'proc import datafile="data/source.csv"\n    out=work.source\n    dbms=csv\n    replace;\n',
+        required: [
+          ['PROC IMPORT', /proc\s+import/i],
+          ['OUT=work.source', /out\s*=\s*work\.source/i],
+          ['DBMS=CSV', /dbms\s*=\s*csv/i],
+          ['GETNAMES=YES', /getnames\s*=\s*yes/i],
+          ['GUESSINGROWS=MAX', /guessingrows\s*=\s*max/i],
+          ['PROC CONTENTS after import', /proc\s+contents[\s\S]*data\s*=\s*work\.source/i]
+        ]
+      },
+      {
+        id: 'inspect',
+        title: '檢查欄位與前幾列',
+        subtitle: 'PROC CONTENTS',
+        caseText: '欄位 metadata 顯示 visit_date 是 SAS date，score 是 numeric，但 label/format 仍要保存成 evidence。',
+        questions: [
+          {
+            question: '為什麼 PROC PRINT(obs=10) 不足以完成資料品質檢查？',
+            choices: ['它只看樣本列，不能代表全表', '它不能顯示任何資料', '它會刪除 format', '它只能用在 database'],
+            answer: 0,
+            explain: '前幾列只適合人工 inspect，不等於整份資料 QC。'
+          },
+          {
+            question: '哪個欄位最可能用來判斷日期是否已是 SAS date？',
+            choices: ['format/informat 與 type', '資料集檔名', 'ODS style', '程式縮排'],
+            answer: 0,
+            explain: 'type/format/informat 是日期欄位檢查重點。'
+          }
+        ],
+        codePrompt: '建立 work.columns metadata table，並列出 name type length label format informat。',
+        starter: 'proc contents data=work.source varnum out=work.columns noprint;\nrun;\n\n',
+        required: [
+          ['PROC CONTENTS', /proc\s+contents/i],
+          ['OUT=work.columns', /out\s*=\s*work\.columns/i],
+          ['NOPRINT', /\bnoprint\b/i],
+          ['PROC PRINT metadata', /proc\s+print[\s\S]*work\.columns/i],
+          ['VAR metadata fields', /var\s+name\s+type\s+length\s+label\s+format\s+informat/i]
+        ]
+      },
+      {
+        id: 'transform',
+        title: 'DATA Step 轉換',
+        subtitle: 'INPUT / IF',
+        caseText: 'raw 中有 bad-date、missing score、age group 衍生欄位。轉換時必須保留 QC flag。',
+        questions: [
+          {
+            question: '文字日期轉 SAS date 時最合適的 pattern 是？',
+            choices: ['visit_dt = input(visit_date, yymmdd10.); format visit_dt yymmdd10.;', 'visit_dt = visit_date + 1;', 'format visit_date $10.;', 'proc sort by visit_date;'],
+            answer: 0,
+            explain: 'INPUT 搭配 informat 解析文字日期，再用 FORMAT 控制顯示。'
+          },
+          {
+            question: '建立 qc_missing_score 的主要目的為何？',
+            choices: ['保留資料品質證據', '自動補值', '刪除 subject', '轉成 PDF'],
+            answer: 0,
+            explain: 'QC flag 讓後續 PROC FREQ 或報告能追蹤缺失值。'
+          }
+        ],
+        codePrompt: '寫 DATA step 建立 work.analysis_ready，將 visit_date 轉 visit_dt，設定 yymmdd10. format，並建立 qc_missing_score。',
+        starter: 'data work.analysis_ready;\n    set work.source;\n',
+        required: [
+          ['DATA work.analysis_ready', /data\s+work\.analysis_ready/i],
+          ['SET work.source', /set\s+work\.source/i],
+          ['INPUT date conversion', /input\s*\(\s*visit_date\s*,\s*yymmdd10\./i],
+          ['FORMAT visit_dt', /format\s+visit_dt\s+yymmdd10\./i],
+          ['missing score flag', /qc_missing_score[\s\S]*missing\s*\(\s*score\s*\)/i],
+          ['RUN terminator', /\brun\s*;/i]
+        ]
+      },
+      {
+        id: 'summarize',
+        title: '摘要與異常值',
+        subtitle: 'PROC FREQ / MEANS',
+        caseText: 'analysis_ready 中有 missing score 與 outlier_flag，需要用類別與數值摘要找出資料風險。',
+        questions: [
+          {
+            question: '哪個 PROC 最適合先看 group、age_group、qc_missing_score 的 level？',
+            choices: ['PROC FREQ / missing', 'PROC SORT nodupkey', 'PROC DATASETS kill', 'PROC IMPORT'],
+            answer: 0,
+            explain: '類別與 flag 先用 PROC FREQ，並加 / missing。'
+          },
+          {
+            question: 'PROC MEANS 若只看 mean，會漏掉什麼？',
+            choices: ['N/NMISS 與極端值風險', '資料集名稱', 'library path', '程式縮排'],
+            answer: 0,
+            explain: 'N、NMISS、min/max/median 都是 QC 必要資訊。'
+          }
+        ],
+        codePrompt: '對 group age_group qc_missing_score 跑 PROC FREQ / missing，並對 score 跑 PROC MEANS n nmiss mean median min max。',
+        starter: 'proc freq data=work.analysis_ready;\n',
+        required: [
+          ['PROC FREQ', /proc\s+freq/i],
+          ['TABLES variables', /tables\s+group\s+age_group\s+qc_missing_score/i],
+          ['/ MISSING', /\/\s*missing/i],
+          ['PROC MEANS', /proc\s+means/i],
+          ['N NMISS statistics', /\bn\b[\s\S]*\bnmiss\b/i],
+          ['VAR score', /var\s+score/i]
+        ]
+      },
+      {
+        id: 'sortBy',
+        title: '排序、BY group 與重複 key',
+        subtitle: 'PROC SORT / FIRST.',
+        caseText: '資料有同一 subject 多次 visit，也有完全重複的 subject_id + visit_dt。要取 first visit，又不能靜默刪除 duplicate evidence。',
+        questions: [
+          {
+            question: '使用 FIRST.subject_id 前最關鍵的前置條件是？',
+            choices: ['資料依 BY variables 排序', '一定要有 PROC REPORT', '必須先 ODS HTML close', '不能有 missing score'],
+            answer: 0,
+            explain: 'BY group 邏輯依排序後的資料順序運作。'
+          },
+          {
+            question: 'NODUPKEY 最安全的教學用法是？',
+            choices: ['搭配 DUPOUT 保存重複 key 供審查', '直接刪掉重複不留紀錄', '用來補 missing', '用來連接 database'],
+            answer: 0,
+            explain: 'DUPOUT 是保留 evidence 的關鍵。'
+          }
+        ],
+        codePrompt: '先 PROC SORT by subject_id visit_dt，再 DATA step 用 BY subject_id 和 FIRST.subject_id 取第一筆，另外用 NODUPKEY DUPOUT 保存重複 key。',
+        starter: 'proc sort data=work.analysis_ready out=work.by_subject;\n    by subject_id visit_dt;\nrun;\n\n',
+        required: [
+          ['PROC SORT', /proc\s+sort/i],
+          ['BY subject_id visit_dt', /by\s+subject_id\s+visit_dt/i],
+          ['DATA first_visit', /data\s+work\.first_visit/i],
+          ['SET by_subject', /set\s+work\.by_subject/i],
+          ['FIRST.subject_id', /first\.subject_id/i],
+          ['NODUPKEY and DUPOUT', /nodupkey[\s\S]*dupout\s*=/i]
+        ]
+      },
+      {
+        id: 'sql',
+        title: 'PROC SQL 查詢與 join',
+        subtitle: 'SELECT / JOIN',
+        caseText: 'visits 需要 join sites，但 join 前 site_id 是否唯一會決定列數是否被放大。',
+        questions: [
+          {
+            question: 'Join 前最重要的 QC 是什麼？',
+            choices: ['確認 key uniqueness 與 row grain', '先把欄位改成大寫', '先輸出 RTF', '先刪除 format'],
+            answer: 0,
+            explain: 'key 不唯一會造成 row multiplication。'
+          },
+          {
+            question: 'GROUP BY 後選了非 group、非 aggregate 欄位，最可能造成什麼？',
+            choices: ['remerge 或語意不清', '自動建立索引', '自動修正 missing', '刪除 duplicate'],
+            answer: 0,
+            explain: 'SQL 彙總欄位必須和 group grain 對齊。'
+          }
+        ],
+        codePrompt: '用 PROC SQL 建立 subject_summary，select subject_id, group, count(*) as visit_count, mean(score) as mean_score，並 group by subject_id, group。',
+        starter: 'proc sql;\n    create table work.subject_summary as\n',
+        required: [
+          ['PROC SQL', /proc\s+sql/i],
+          ['CREATE TABLE', /create\s+table\s+work\.subject_summary/i],
+          ['COUNT aggregate', /count\s*\(\s*\*\s*\)\s+as\s+visit_count/i],
+          ['MEAN aggregate', /mean\s*\(\s*score\s*\)\s+as\s+mean_score/i],
+          ['GROUP BY subject_id group', /group\s+by\s+subject_id\s*,\s*group/i],
+          ['QUIT terminator', /\bquit\s*;/i]
+        ]
+      },
+      {
+        id: 'clinical',
+        title: '臨床資料邊界',
+        subtitle: 'raw / SDTM / ADaM',
+        caseText: 'training data 只能示範 clinical thinking：raw、SDTM-style、ADaM-style、TLF、define.xml 的邊界要清楚。',
+        questions: [
+          {
+            question: '把 raw table 直接命名為 SDTM domain 的風險是什麼？',
+            choices: ['誤以為已完成標準化與 traceability', '會讓 PROC PRINT 變慢', '會自動產生 define.xml', '會刪除 label'],
+            answer: 0,
+            explain: 'raw 到 SDTM/ADaM 需要 mapping、controlled terms、traceability。'
+          },
+          {
+            question: 'define.xml 最接近哪一種物件？',
+            choices: ['metadata exchange', 'SAS log', 'subject visit row', 'ODS output style'],
+            answer: 0,
+            explain: 'define.xml 描述 metadata，不是資料列本體。'
+          }
+        ],
+        codePrompt: '用 DATA step 建立 work.dm_like，保留 studyid/usubjid/site_id/group/age，並用 cats(studyid,"-",subject_id) 建立 usubjid。',
+        starter: 'data work.dm_like;\n    set work.source;\n    studyid = "TRAINING";\n',
+        required: [
+          ['DATA dm_like', /data\s+work\.dm_like/i],
+          ['SET work.source', /set\s+work\.source/i],
+          ['STUDYID assignment', /studyid\s*=\s*["']TRAINING["']/i],
+          ['USUBJID derivation', /usubjid\s*=\s*cats\s*\(\s*studyid\s*,\s*["']-["']\s*,\s*subject_id\s*\)/i],
+          ['KEEP trace fields', /keep\s+studyid\s+usubjid\s+site_id\s+group\s+age/i],
+          ['RUN terminator', /\brun\s*;/i]
+        ]
+      },
+      {
+        id: 'report',
+        title: '報表輸出與可讀交付',
+        subtitle: 'ODS / PROC REPORT',
+        caseText: 'QC summary 要交付成 HTML，數字必須能追到 source table、program、log scan。',
+        questions: [
+          {
+            question: '只交截圖最大的問題是什麼？',
+            choices: ['不可重跑、不可審查', '會讓 row count 自動變 0', '不能使用 title', '不能開 SAS'],
+            answer: 0,
+            explain: '交付要有程式、log、輸出與限制。'
+          },
+          {
+            question: 'PROC REPORT 中 COLUMN statement 的價值是什麼？',
+            choices: ['明確列出報表欄位', '連接 ODBC', '修正日期 informat', '刪除 duplicate'],
+            answer: 0,
+            explain: '報表欄位要可讀也要可審查。'
+          }
+        ],
+        codePrompt: '用 ODS HTML 輸出 reports/qc_summary.html，並用 PROC REPORT data=work.analysis_ready nowd，包含 column group age score。',
+        starter: 'ods html path="reports" file="qc_summary.html";\n\n',
+        required: [
+          ['ODS HTML path/file', /ods\s+html[\s\S]*path\s*=\s*["']reports["'][\s\S]*file\s*=\s*["']qc_summary\.html["']/i],
+          ['PROC REPORT', /proc\s+report/i],
+          ['DATA=work.analysis_ready', /data\s*=\s*work\.analysis_ready/i],
+          ['NOWD', /\bnowd\b/i],
+          ['COLUMN group age score', /column\s+group\s+age\s+score/i],
+          ['ODS HTML CLOSE', /ods\s+html\s+close\s*;/i]
+        ]
+      },
+      {
+        id: 'validate',
+        title: '交付證據與 log 審查',
+        subtitle: 'Log scan / blocker',
+        caseText: '交付前需要比較 row count、distinct subject、missing count，並掃描 SAS log；沒有 SAS backend 時不能宣稱 runtime complete。',
+        questions: [
+          {
+            question: '沒有真實 SAS log 時，最準確的完成狀態是？',
+            choices: ['code generation/static check passed, runtime not verified', '完全 runtime verified', 'submission ready', 'CDISC compliant'],
+            answer: 0,
+            explain: '沒有 SAS session 和 log，就不能宣稱 runtime 已驗證。'
+          },
+          {
+            question: 'suspicious NOTE 的正確處理是？',
+            choices: ['記錄並判斷是否影響資料', '全部忽略', '只看 ERROR', '用 ODS 隱藏'],
+            answer: 0,
+            explain: '型別轉換、missing 生成、uninitialized variable 都可能改變結果。'
+          }
+        ],
+        codePrompt: '用 PROC SQL 產生 rows、distinct_subjects、missing_score 三個 evidence count，並以 QUIT; 結束。',
+        starter: 'proc sql;\n    select count(*) as rows,\n',
+        required: [
+          ['PROC SQL', /proc\s+sql/i],
+          ['COUNT rows', /count\s*\(\s*\*\s*\)\s+as\s+rows/i],
+          ['COUNT DISTINCT subject_id', /count\s*\(\s*distinct\s+subject_id\s*\)\s+as\s+distinct_subjects/i],
+          ['SUM missing score', /sum\s*\(\s*missing\s*\(\s*score\s*\)\s*\)\s+as\s+missing_score/i],
+          ['FROM analysis_ready', /from\s+work\.analysis_ready/i],
+          ['QUIT terminator', /\bquit\s*;/i]
+        ]
+      }
+    ];
+
+    let activeModule = quizBank[0].id;
+    const answers = JSON.parse(localStorage.getItem('sasTutorQuizAnswers') || '{}');
+    const codeAnswers = JSON.parse(localStorage.getItem('sasTutorQuizCode') || '{}');
+    const scratchAnswers = JSON.parse(localStorage.getItem('sasTutorQuizScratch') || '{}');
+    const checkedAnswers = JSON.parse(localStorage.getItem('sasTutorQuizChecked') || '{}');
+
+    const moduleList = document.getElementById('module-list');
+    const questionList = document.getElementById('question-list');
+    const codeBox = document.getElementById('short-answer-code');
+    const scratchBox = document.getElementById('scratch-code');
+    const codeChecks = document.getElementById('code-checks');
+    const codeLog = document.getElementById('code-log');
+    const resultSummary = document.getElementById('result-summary');
+    const propertyList = document.getElementById('property-list');
+    const requiredList = document.getElementById('required-list');
+
+    function currentModule() {
+      return quizBank.find((module) => module.id === activeModule) || quizBank[0];
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
+
+    function saveState() {
+      localStorage.setItem('sasTutorQuizAnswers', JSON.stringify(answers));
+      localStorage.setItem('sasTutorQuizCode', JSON.stringify(codeAnswers));
+      localStorage.setItem('sasTutorQuizScratch', JSON.stringify(scratchAnswers));
+      localStorage.setItem('sasTutorQuizChecked', JSON.stringify(checkedAnswers));
+      const completed = quizBank.filter((module) => isModuleComplete(module)).length;
+      document.getElementById('progress-label').textContent = `${completed} / ${quizBank.length} 完成`;
+    }
+
+    function codePasses(module) {
+      const code = codeAnswers[module.id] || '';
+      return module.required.every(([, pattern]) => pattern.test(code));
+    }
+
+    function isModuleComplete(module) {
+      const moduleAnswers = answers[module.id] || [];
+      return checkedAnswers[module.id] === true
+        && module.questions.every((question, index) => moduleAnswers[index] === question.answer)
+        && codePasses(module);
+    }
+
+    function setOutputTab(tabName) {
+      document.querySelectorAll('[data-output-tab]').forEach((tab) => {
+        const active = tab.dataset.outputTab === tabName;
+        tab.classList.toggle('inactive', !active);
+        tab.setAttribute('aria-pressed', String(active));
+      });
+      document.querySelectorAll('.output-panel').forEach((panel) => {
+        panel.classList.toggle('active', panel.id === `${tabName}-panel`);
+      });
+    }
+
+    function setProgramTab(tabName) {
+      document.querySelectorAll('[data-program-tab]').forEach((tab) => {
+        const active = tab.dataset.programTab === tabName;
+        tab.classList.toggle('inactive', !active);
+        tab.setAttribute('aria-pressed', String(active));
+      });
+      codeBox.classList.toggle('active', tabName === 'answer');
+      scratchBox.classList.toggle('active', tabName === 'scratch');
+      document.querySelector('.toolbar-title').textContent = tabName === 'answer' ? 'Program 1.sas' : 'Program 2.sas';
+    }
+
+    function setTaskTab(tabName) {
+      document.querySelectorAll('[data-task-tab]').forEach((tab) => {
+        const active = tab.dataset.taskTab === tabName;
+        tab.classList.toggle('inactive', !active);
+        tab.setAttribute('aria-pressed', String(active));
+      });
+      document.querySelectorAll('.task-panel').forEach((panel) => {
+        panel.classList.toggle('active', panel.id === `${tabName}-panel`);
+      });
+    }
+
+    function renderResultSummary(module) {
+      const moduleAnswers = answers[module.id] || [];
+      const correct = module.questions.filter((question, index) => moduleAnswers[index] === question.answer).length;
+      const answered = module.questions.filter((_question, index) => moduleAnswers[index] !== undefined).length;
+      const codeOk = codePasses(module);
+      const checked = checkedAnswers[module.id] === true;
+      const complete = checked && correct === module.questions.length && codeOk;
+      resultSummary.innerHTML = [
+        ['Case Questions', checked ? `${correct} / ${module.questions.length} correct` : `${answered} / ${module.questions.length} answered`],
+        ['Program Check', checked ? (codeOk ? 'passed' : 'not complete') : 'not checked'],
+        ['Lesson Status', complete ? 'complete' : 'in progress'],
+        ['Runtime Boundary', 'static check only']
+      ].map(([title, value]) => `<div class="result-card">
+        <strong>${escapeHtml(title)}</strong>
+        <span>${escapeHtml(value)}</span>
+      </div>`).join('');
+    }
+
+    function renderModules() {
+      moduleList.innerHTML = quizBank.map((module, index) => {
+        const done = isModuleComplete(module) ? '完成' : module.subtitle;
+        return `<button class="module-button" type="button" data-module="${module.id}" aria-current="${module.id === activeModule}">
+          <span class="step-index">${index + 1}</span>
+          <span><span class="module-title">${escapeHtml(module.title)}</span><span class="module-subtitle">${escapeHtml(done)}</span></span>
+        </button>`;
+      }).join('');
+    }
+
+    function renderQuestions(module) {
+      const moduleAnswers = answers[module.id] || [];
+      const checked = checkedAnswers[module.id] === true;
+      questionList.innerHTML = module.questions.map((question, qIndex) => {
+        const selected = moduleAnswers[qIndex];
+        const choices = question.choices.map((choice, cIndex) => {
+          let state = '';
+          if (selected === cIndex) {
+            state = checked ? (cIndex === question.answer ? ' correct' : ' incorrect') : ' selected';
+          }
+          if (checked && cIndex === question.answer && selected !== cIndex) state = ' correct';
+          return `<button class="choice${state}" type="button" data-question="${qIndex}" data-choice="${cIndex}">${escapeHtml(choice)}</button>`;
+        }).join('');
+        const explain = checked ? `<p class="small-note">${escapeHtml(question.explain)}</p>` : '';
+        return `<div class="question-card">
+          <p>${qIndex + 1}. ${escapeHtml(question.question)}</p>
+          <div class="choice-list">${choices}</div>
+          ${explain}
+        </div>`;
+      }).join('');
+      const correct = module.questions.filter((question, index) => moduleAnswers[index] === question.answer).length;
+      const answered = module.questions.filter((_question, index) => moduleAnswers[index] !== undefined).length;
+      document.getElementById('choice-score').textContent = checked ? `${correct} / ${module.questions.length} 答對` : `${answered} / ${module.questions.length} 已作答`;
+      document.getElementById('choice-status').textContent = checked
+        ? (correct === module.questions.length ? '案例題通過' : '需要修正')
+        : '尚未檢查';
+      renderResultSummary(module);
+    }
+
+    function renderProperties(module) {
+      const moduleAnswers = answers[module.id] || [];
+      const answered = module.questions.filter((_question, index) => moduleAnswers[index] !== undefined).length;
+      const checked = checkedAnswers[module.id] === true ? 'checked' : 'not checked';
+      propertyList.innerHTML = [
+        ['Lesson', module.title],
+        ['Topic', module.subtitle],
+        ['Question Count', String(module.questions.length)],
+        ['Answered', `${answered} / ${module.questions.length}`],
+        ['Program Source', 'Program 1.sas'],
+        ['Scratch Pad', 'Program 2.sas'],
+        ['Status', checked]
+      ].map(([key, value]) => `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd>`).join('');
+      requiredList.innerHTML = module.required.map(([label]) => `<div class="required-item">${escapeHtml(label)}</div>`).join('');
+    }
+
+    function evaluateAnswer(module) {
+      const code = codeBox.value;
+      codeAnswers[module.id] = code;
+      checkedAnswers[module.id] = true;
+      const moduleAnswers = answers[module.id] || [];
+      const missingChoices = module.questions
+        .map((question, index) => (moduleAnswers[index] === undefined ? index + 1 : null))
+        .filter((value) => value !== null);
+      const wrongChoices = module.questions
+        .map((question, index) => (moduleAnswers[index] !== undefined && moduleAnswers[index] !== question.answer ? index + 1 : null))
+        .filter((value) => value !== null);
+      const results = module.required.map(([label, pattern]) => ({
+        label,
+        ok: pattern.test(code)
+      }));
+      const questionChecks = [
+        {
+          label: `選擇題已作答 ${module.questions.length - missingChoices.length} / ${module.questions.length}`,
+          ok: missingChoices.length === 0
+        },
+        {
+          label: '選擇題答案正確',
+          ok: missingChoices.length === 0 && wrongChoices.length === 0
+        }
+      ];
+      codeChecks.innerHTML = [...questionChecks, ...results].map((result) => `<div class="check-item ${result.ok ? 'ok' : 'fail'}">
+        <span class="check-dot">${result.ok ? '✓' : '!'}</span>
+        <span>${escapeHtml(result.label)}</span>
+      </div>`).join('');
+      const missing = results.filter((result) => !result.ok).map((result) => result.label);
+      const logLines = [];
+      if (missingChoices.length) logLines.push(`ERROR: 尚未作答題目 ${missingChoices.join(', ')}。`);
+      if (wrongChoices.length) logLines.push(`ERROR: 題目 ${wrongChoices.join(', ')} 答案不正確。`);
+      if (missing.length) logLines.push(`ERROR: 程式碼缺少 ${missing.join(', ')}。`);
+      if (!logLines.length) logLines.push('NOTE: 選擇題與程式碼簡答皆符合本題教學檢查點。');
+      codeLog.textContent = logLines.join('\n');
+      saveState();
+      renderQuestions(module);
+      renderProperties(module);
+      renderModules();
+      renderResultSummary(module);
+      setOutputTab(logLines.some((line) => line.startsWith('ERROR:')) ? 'checks' : 'results');
+    }
+
+    function resetCodeChecks() {
+      codeChecks.innerHTML = '';
+      codeLog.textContent = '選擇題目並輸入 SAS 程式後按「檢查答案」。';
+      renderResultSummary(currentModule());
+    }
+
+    function render() {
+      const module = currentModule();
+      document.getElementById('quiz-title').textContent = module.title;
+      document.getElementById('case-text').textContent = module.caseText;
+      document.getElementById('code-prompt').textContent = module.codePrompt;
+      codeBox.value = codeAnswers[module.id] || module.starter;
+      scratchBox.value = scratchAnswers[module.id] || '';
+      renderModules();
+      renderQuestions(module);
+      renderProperties(module);
+      resetCodeChecks();
+      setOutputTab('log');
+      setProgramTab('answer');
+      setTaskTab('tasks');
+      saveState();
+    }
+
+    moduleList.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-module]');
+      if (!button) return;
+      codeAnswers[activeModule] = codeBox.value;
+      scratchAnswers[activeModule] = scratchBox.value;
+      activeModule = button.dataset.module;
+      render();
+    });
+
+    questionList.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-choice]');
+      if (!button) return;
+      const module = currentModule();
+      const questionIndex = Number(button.dataset.question);
+      const selected = Number(button.dataset.choice);
+      answers[module.id] = answers[module.id] || [];
+      answers[module.id][questionIndex] = selected;
+      checkedAnswers[module.id] = false;
+      renderQuestions(module);
+      renderProperties(module);
+      saveState();
+      renderModules();
+    });
+
+    codeBox.addEventListener('input', () => {
+      codeAnswers[activeModule] = codeBox.value;
+      checkedAnswers[activeModule] = false;
+      resetCodeChecks();
+      saveState();
+    });
+
+    scratchBox.addEventListener('input', () => {
+      scratchAnswers[activeModule] = scratchBox.value;
+      saveState();
+    });
+
+    document.getElementById('load-starter').addEventListener('click', () => {
+      const module = currentModule();
+      codeBox.value = module.starter;
+      codeAnswers[module.id] = module.starter;
+      checkedAnswers[module.id] = false;
+      resetCodeChecks();
+      setProgramTab('answer');
+      saveState();
+    });
+
+    document.getElementById('clear-code').addEventListener('click', () => {
+      const scratchActive = scratchBox.classList.contains('active');
+      if (scratchActive) {
+        scratchBox.value = '';
+        scratchAnswers[activeModule] = '';
+      } else {
+        codeBox.value = '';
+        codeAnswers[activeModule] = '';
+        checkedAnswers[activeModule] = false;
+        resetCodeChecks();
+      }
+      saveState();
+    });
+
+    document.getElementById('check-answer').addEventListener('click', () => {
+      evaluateAnswer(currentModule());
+    });
+
+    document.getElementById('check-answer-inline').addEventListener('click', () => {
+      evaluateAnswer(currentModule());
+    });
+
+    document.querySelector('[aria-label="Output tabs"]').addEventListener('click', (event) => {
+      const tab = event.target.closest('[data-output-tab]');
+      if (!tab) return;
+      setOutputTab(tab.dataset.outputTab);
+    });
+
+    document.querySelector('[aria-label="Program editor"] .pane-tabs').addEventListener('click', (event) => {
+      const tab = event.target.closest('[data-program-tab]');
+      if (!tab) return;
+      codeAnswers[activeModule] = codeBox.value;
+      scratchAnswers[activeModule] = scratchBox.value;
+      saveState();
+      setProgramTab(tab.dataset.programTab);
+    });
+
+    document.querySelector('[aria-label="Tasks and questions"] .pane-tabs').addEventListener('click', (event) => {
+      const tab = event.target.closest('[data-task-tab]');
+      if (!tab) return;
+      renderProperties(currentModule());
+      setTaskTab(tab.dataset.taskTab);
+    });
+
+    render();
+  </script>
+</body>
+</html>
