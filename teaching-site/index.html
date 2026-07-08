@@ -139,8 +139,7 @@
     .button:focus-visible,
     a.button:focus-visible,
     .module-button:focus-visible,
-    .choice:focus-visible,
-    .chip:focus-visible {
+    .choice:focus-visible {
       outline: 3px solid rgba(31, 111, 139, .25);
       outline-offset: 2px;
     }
@@ -285,26 +284,26 @@
       white-space: nowrap;
     }
 
-    .source-switcher {
+    .source-status {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-    }
-
-    .chip {
-      min-height: 34px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: #ffffff;
-      color: var(--ink);
+      align-items: center;
+      color: var(--muted);
+      font-size: .86rem;
       font-weight: 700;
     }
 
-    .chip[aria-pressed="true"] {
-      border-color: rgba(31, 111, 139, .55);
-      background: var(--accent);
-      color: #ffffff;
+    .db-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 9px;
+      border: 1px solid #bfd7df;
+      border-radius: 999px;
+      background: #f3f9fb;
+      color: var(--accent);
+      font-weight: 900;
     }
 
     .lesson-body {
@@ -313,6 +312,184 @@
       gap: 14px;
       padding: 14px;
       align-items: start;
+    }
+
+    .database-visual {
+      margin: 14px 14px 0;
+      padding: 13px;
+      border: 1px solid #bfd7df;
+      border-radius: 8px;
+      background: #f8fbfc;
+    }
+
+    .visual-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .visual-header strong {
+      display: block;
+      font-size: .96rem;
+    }
+
+    .visual-header p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .flow-rail {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .flow-node {
+      position: relative;
+      min-height: 74px;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .flow-node::after {
+      content: "";
+      position: absolute;
+      inset: auto 10px 8px 10px;
+      height: 4px;
+      border-radius: 999px;
+      background: #e7edf3;
+    }
+
+    .flow-node.active {
+      border-color: rgba(31, 111, 139, .55);
+      background: var(--accent-soft);
+    }
+
+    .flow-node.active::after {
+      background: var(--accent);
+    }
+
+    .flow-node strong,
+    .flow-node span {
+      display: block;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .flow-node strong {
+      font-size: .82rem;
+      line-height: 1.25;
+    }
+
+    .flow-node span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .74rem;
+      line-height: 1.25;
+    }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr);
+      gap: 12px;
+    }
+
+    .relationship-map,
+    .metric-board {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 11px;
+    }
+
+    .relationship-map h4,
+    .metric-board h4 {
+      margin: 0 0 9px;
+      font-size: .88rem;
+    }
+
+    .er-canvas {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-card {
+      min-height: 112px;
+      padding: 9px;
+      border: 1px solid #d7e4ea;
+      border-radius: 8px;
+      background: #fbfcfd;
+    }
+
+    .table-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--accent);
+      font-size: .84rem;
+    }
+
+    .table-card code {
+      display: block;
+      color: var(--muted);
+      font-size: .74rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .relation-line {
+      color: var(--accent);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .metric-board {
+      display: grid;
+      gap: 8px;
+    }
+
+    .metric-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fbfcfd;
+    }
+
+    .metric-card span {
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .metric-card strong {
+      font-size: .9rem;
+      overflow-wrap: anywhere;
+    }
+
+    .metric-value {
+      min-width: 52px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      text-align: center;
+      font-weight: 900;
+      font-size: .78rem;
     }
 
     .left-stack {
@@ -772,6 +949,16 @@
         grid-template-columns: 1fr;
       }
 
+      .flow-rail,
+      .visual-grid,
+      .er-canvas {
+        grid-template-columns: 1fr;
+      }
+
+      .relation-line {
+        transform: rotate(90deg);
+      }
+
       .study-bridge,
       .note-grid {
         grid-template-columns: 1fr;
@@ -817,14 +1004,34 @@
               <h2 id="lesson-title"></h2>
               <p id="lesson-objective"></p>
             </div>
-            <span class="pill" id="source-pill">dataset</span>
+            <span class="pill" id="source-pill">database</span>
           </div>
-          <div class="source-switcher" aria-label="資料入口">
-            <button class="chip" type="button" data-source="dataset" aria-pressed="true">Dataset</button>
-            <button class="chip" type="button" data-source="spec" aria-pressed="false">Spec</button>
-            <button class="chip" type="button" data-source="database" aria-pressed="false">Database</button>
+          <div class="source-status" aria-label="固定資料入口">
+            <span class="db-badge">Database only</span>
+            <span>以 metadata、bounded sample、join key、row count 與 log evidence 學習 SAS database workflow。</span>
           </div>
         </div>
+
+        <section class="database-visual" aria-label="Database 視覺化學習圖">
+          <div class="visual-header">
+            <div>
+              <strong>Database Onboarding Map</strong>
+              <p>每課都從 schema metadata 開始，逐步走到 bounded sample、join 設計、QC evidence 與交付。</p>
+            </div>
+            <span class="db-badge">ODBC / SQL / DICTIONARY.COLUMNS</span>
+          </div>
+          <div class="flow-rail" id="database-flow"></div>
+          <div class="visual-grid">
+            <div class="relationship-map">
+              <h4>Table Relationship</h4>
+              <div class="er-canvas" id="relationship-map"></div>
+            </div>
+            <div class="metric-board">
+              <h4>本課 QC 指標</h4>
+              <div id="metric-board"></div>
+            </div>
+          </div>
+        </section>
 
         <div class="lesson-body">
           <div class="left-stack">
@@ -994,303 +1201,299 @@
     };
 
     const sourceProfiles = {
-      dataset: {
-        label: 'dataset',
-        boundary: '目前視為 raw training dataset；分析前要先確認 key、missing、日期欄位與類別值。',
-        table: {
-          headers: ['subject_id', 'group', 'age', 'visit_date', 'score', 'site_id'],
-          rows: [
-            ['S001', 'A', '34', '2026-01-02', '12.5', '101'],
-            ['S002', 'B', '41', '2026-01-03', '', '101'],
-            ['S003', 'A', '29', '2026-01-04', '15.2', '102'],
-            ['S004', 'C', '58', '2026-01-07', '18.9', '102']
-          ]
-        },
-        profiles: [
-          ['subject_id', 'candidate key', 100],
-          ['group', 'categorical', 75],
-          ['age', 'numeric measure', 100],
-          ['visit_date', 'date/time', 100],
-          ['score', 'numeric measure', 75],
-          ['site_id', 'join field', 80]
-        ]
-      },
-      spec: {
-        label: 'spec',
-        boundary: 'Spec 是 metadata contract；不能假設資料值存在，要先做欄位、型別、長度與 label 對照。',
-        table: {
-          headers: ['variable', 'label', 'type', 'length', 'required', 'codelist'],
-          rows: [
-            ['subject_id', 'Subject identifier', 'char', '12', 'Y', ''],
-            ['visit_date', 'Visit date', 'date', '10', 'Y', 'ISO8601'],
-            ['group', 'Treatment group', 'char', '1', 'Y', 'A/B/C'],
-            ['score', 'Assessment score', 'num', '8', 'N', '']
-          ]
-        },
-        profiles: [
-          ['variable', 'metadata key', 100],
-          ['label', 'descriptor', 100],
-          ['type', 'type contract', 100],
-          ['length', 'length contract', 100],
-          ['required', 'rule flag', 85],
-          ['codelist', 'controlled term', 65]
-        ]
-      },
       database: {
         label: 'database',
         boundary: 'Database 入口先看 metadata 與 bounded sample；不要直接拉全表，先確認 table grain、key 與 join 欄位。',
         table: {
-          headers: ['table_name', 'column_name', 'type', 'nullable', 'role'],
+          headers: ['table', 'column', 'type', 'nullable', 'role'],
           rows: [
-            ['visits', 'subject_id', 'varchar', 'NO', 'key'],
-            ['visits', 'visit_date', 'date', 'NO', 'time'],
-            ['visits', 'score', 'numeric', 'YES', 'measure'],
-            ['sites', 'site_id', 'integer', 'NO', 'join key']
+            ['src.visits', 'subject_id', 'varchar', 'NO', 'candidate key'],
+            ['src.visits', 'visit_date', 'date', 'NO', 'time field'],
+            ['src.visits', 'score', 'numeric', 'YES', 'measure'],
+            ['src.sites', 'site_id', 'integer', 'NO', 'join key']
           ]
         },
         profiles: [
-          ['subject_id', 'candidate key', 100],
-          ['visit_date', 'date/time', 100],
-          ['score', 'numeric measure', 80],
-          ['group_name', 'categorical', 60],
-          ['site_id', 'join field', 75]
+          ['schema', 'source contract', 100],
+          ['table grain', 'first decision', 100],
+          ['join key', 'row risk', 90],
+          ['bounded sample', 'safe extract', 85]
         ]
       }
     };
 
+    const databaseFlow = [
+      ['orient', 'Classify', 'DSN, schema, grain'],
+      ['library', 'Connect', 'LIBNAME / access path'],
+      ['import', 'Bounded sample', 'OUTOBS / WHERE'],
+      ['inspect', 'Metadata', 'dictionary.columns'],
+      ['transform', 'Derive', 'DATA step rules'],
+      ['summarize', 'Profile', 'FREQ / MEANS'],
+      ['sortBy', 'Keys', 'BY group / duplicates'],
+      ['sql', 'Join', 'PROC SQL relationships'],
+      ['clinical', 'Standards', 'raw to SDTM/ADaM'],
+      ['biostats', 'Analysis intent', 'SAP / estimand'],
+      ['report', 'Output', 'ODS / TLF'],
+      ['validate', 'Evidence', 'log / row counts']
+    ];
+
+    const relationshipTables = [
+      ['src.visits', ['subject_id', 'visit_date', 'site_id', 'score']],
+      ['src.sites', ['site_id', 'site_name', 'region']],
+      ['src.analysis_rules', ['endpoint_id', 'estimand_strategy', 'rule_text']]
+    ];
+
+    const visualMetricLibrary = {
+      orient: [['metadata', 'schema'], ['grain', 'visit row'], ['sample', 'bounded'], ['risk', 'medium']],
+      library: [['libref', 'SRC'], ['engine', 'ODBC'], ['role', 'read-only'], ['output', 'WORK/QC']],
+      import: [['outobs', '20'], ['where', 'required'], ['rows', 'checked'], ['type risk', 'review']],
+      inspect: [['columns', 'visible'], ['key', 'candidate'], ['nullable', 'review'], ['format', 'review']],
+      transform: [['date rule', 'input'], ['missing', 'flag'], ['derived', 'trace'], ['log', 'clean']],
+      summarize: [['n', 'count'], ['nmiss', 'shown'], ['levels', 'listed'], ['outlier', 'flag']],
+      sortBy: [['by key', 'sorted'], ['dupout', 'saved'], ['first.', 'review'], ['grain', 'confirmed']],
+      sql: [['join key', 'site_id'], ['row count', 'before/after'], ['group by', 'checked'], ['outobs', 'safe']],
+      clinical: [['boundary', 'raw'], ['standard', 'mapped'], ['trace', 'kept'], ['privacy', 'gate']],
+      biostats: [['source docs', 'listed'], ['estimand', 'mapped'], ['SAP rule', 'trace'], ['blind risk', 'checked']],
+      report: [['output', 'HTML'], ['footnote', 'source'], ['trace', 'linked'], ['review', 'ready']],
+      validate: [['errors', '0'], ['warnings', 'review'], ['row count', 'match'], ['blocker', 'listed']]
+    };
+
     const lessonPractice = {
       orient: {
-        dataset: {
+        database: {
+          label: 'database source registry',
           table: {
-            headers: ['source_name', 'source_type', 'row_grain', 'key_candidate', 'date_field', 'row_count', 'risk'],
+            headers: ['schema', 'table', 'grain', 'candidate_key', 'risk'],
             rows: [
-              ['raw_visits.csv', 'dataset', 'one subject visit', 'subject_id + visit_num', 'visit_date', '420', 'missing score'],
-              ['lab_dictionary.xlsx', 'spec', 'one variable definition', 'variable', '', '64', 'metadata only'],
-              ['edc.visit', 'database', 'one EDC visit row', 'study_id + subject_id + visit_num', 'visit_dtc', '18520', 'bounded extract needed'],
-              ['ae_raw.xpt', 'dataset', 'one adverse event', 'usubjid + aeterm + aestdtc', 'aestdtc', '218', 'clinical boundary']
+              ['edc', 'visits', 'subject visit', 'study_id + subject_id + visit_num', 'bounded sample'],
+              ['edc', 'sites', 'site', 'site_id', 'read only'],
+              ['analysis', 'analysis_rules', 'endpoint rule', 'endpoint_id', 'SAP pending'],
+              ['audit', 'extract_log', 'extract run', 'run_id', 'log review']
             ]
           },
           profiles: [
-            ['source_type', 'routing key', 100],
-            ['row_grain', 'grain decision', 100],
-            ['key_candidate', 'candidate key', 90],
-            ['risk', 'onboarding blocker', 80]
+            ['schema', 'access boundary', 100],
+            ['grain', 'row meaning', 100],
+            ['candidate_key', 'join control', 95],
+            ['risk', 'onboarding blocker', 85]
           ]
         }
       },
       library: {
-        dataset: {
+        database: {
+          label: 'database libref map',
           table: {
-            headers: ['libref', 'engine', 'physical_path', 'member', 'rows', 'write_role', 'purpose'],
+            headers: ['libref', 'engine', 'schema', 'scope', 'role', 'purpose'],
             rows: [
-              ['RAW', 'V9', 'data/raw', 'source', '420', 'read only', 'source retention'],
-              ['DERIVED', 'V9', 'data/derived', 'analysis_ready', '0', 'write', 'DATA step output'],
-              ['QC', 'V9', 'reports/qc', 'columns', '0', 'write', 'inspection evidence'],
-              ['WORK', 'TEMP', 'session', 'source_spec', '64', 'write', 'scratch table']
+              ['SRC', 'ODBC', 'edc', 'visits/sites', 'read', 'source'],
+              ['RULE', 'ODBC', 'analysis', 'rules', 'read', 'SAP trace'],
+              ['WORK', 'TEMP', 'session', 'extracts', 'write', 'scratch'],
+              ['QC', 'V9', 'reports', 'checks', 'write', 'evidence']
             ]
           },
           profiles: [
-            ['RAW', 'read-only source', 100],
-            ['DERIVED', 'permanent output', 90],
-            ['QC', 'evidence library', 80],
-            ['WORK', 'session temporary', 95]
+            ['SRC', 'source tables', 100],
+            ['RULE', 'analysis rules', 90],
+            ['WORK', 'bounded extract', 95],
+            ['QC', 'evidence output', 85]
           ]
         }
       },
       import: {
-        dataset: {
+        database: {
+          label: 'bounded database extract',
           table: {
-            headers: ['subject_id', 'visit_num', 'visit_date_raw', 'group_raw', 'age_raw', 'score_raw', 'site_id', 'import_risk'],
+            headers: ['subject_id', 'visit_num', 'visit_dtc', 'score_raw', 'site_id', 'extract_rule', 'risk'],
             rows: [
-              ['S001', '1', '2026-01-02', 'A', '34', '12.5', '101', 'clean'],
-              ['S001', '2', '01/16/2026', 'A', '34', '13.1', '101', 'mixed date style'],
-              ['S002', '1', '2026-01-03', 'B', '41', '', '101', 'missing score'],
-              ['S003', '1', '2026-01-04', 'A', '29', '15.2 mg', '102', 'numeric stored with unit'],
-              ['S004', '1', '2026-13-07', 'C', '58', '18.9', '102', 'invalid month']
+              ['S001', '1', '2026-01-02', '12.5', '101', 'outobs=20', 'clean'],
+              ['S001', '2', '2026-01-16', '13.1', '101', 'where study', 'repeat visit'],
+              ['S002', '1', '2026-01-03', '', '101', 'where study', 'missing score'],
+              ['S003', '1', '2026-01-04', '15.2', '102', 'outobs=20', 'join needed']
             ]
           },
           profiles: [
-            ['visit_date_raw', 'informat risk', 100],
-            ['score_raw', 'type guessing risk', 95],
-            ['group_raw', 'controlled term', 75],
-            ['site_id', 'join field', 70]
+            ['visit_dtc', 'date parsing', 95],
+            ['score_raw', 'type review', 90],
+            ['site_id', 'join field', 85],
+            ['extract_rule', 'bounded sample', 100]
           ]
         }
       },
       inspect: {
-        dataset: {
+        database: {
+          label: 'dictionary.columns snapshot',
           table: {
-            headers: ['name', 'type', 'length', 'format', 'informat', 'label', 'review_note'],
+            headers: ['table', 'column', 'db_type', 'sas_type', 'nullable', 'review'],
             rows: [
-              ['subject_id', 'char', '12', '', '', 'Subject identifier', 'candidate key component'],
-              ['visit_date', 'num', '8', 'YYMMDD10.', 'YYMMDD10.', 'Visit date', 'SAS date confirmed'],
-              ['score', 'num', '8', '8.1', '', 'Assessment score', 'nmiss required'],
-              ['group', 'char', '1', '', '', 'Treatment group', 'controlled values A/B/C'],
-              ['site_id', 'num', '8', 'Z3.', '', 'Site identifier', 'join field']
+              ['visits', 'subject_id', 'varchar(12)', 'char', 'NO', 'key part'],
+              ['visits', 'visit_dtc', 'varchar(10)', 'char', 'NO', 'convert date'],
+              ['visits', 'score_raw', 'varchar(16)', 'char', 'YES', 'numeric input'],
+              ['sites', 'site_id', 'integer', 'num', 'NO', 'join key']
             ]
           },
           profiles: [
-            ['name', 'metadata key', 100],
-            ['type', 'type contract', 100],
-            ['format', 'display rule', 90],
-            ['review_note', 'QC action', 85]
+            ['column', 'metadata key', 100],
+            ['db_type', 'source type', 95],
+            ['sas_type', 'SAS contract', 90],
+            ['review', 'QC action', 85]
           ]
         }
       },
       transform: {
-        dataset: {
+        database: {
+          label: 'database extract transform plan',
           table: {
-            headers: ['subject_id', 'visit_date', 'score', 'age', 'expected_visit_dt', 'expected_age_group', 'expected_qc_flag'],
+            headers: ['subject_id', 'visit_dtc', 'score_raw', 'visit_dt_rule', 'score_rule', 'qc_flag'],
             rows: [
-              ['S001', '2026-01-02', '12.5', '34', '2026-01-02', 'LT40', '0'],
-              ['S002', '2026-01-03', '', '41', '2026-01-03', 'GE40', '1'],
-              ['S003', '2026-01-04', '15.2', '29', '2026-01-04', 'LT40', '0'],
-              ['S004', '2026-01-07', '18.9', '58', '2026-01-07', 'GE40', '0'],
-              ['S005', 'bad-date', '17.0', '37', '.', 'LT40', '1']
+              ['S001', '2026-01-02', '12.5', 'yymmdd10.', 'input 8.1', '0'],
+              ['S002', '2026-01-03', '', 'yymmdd10.', 'missing flag', '1'],
+              ['S003', '2026-01-04', '15.2', 'yymmdd10.', 'input 8.1', '0'],
+              ['S004', 'bad-date', '18.9', 'invalid date', 'input 8.1', '1']
             ]
           },
           profiles: [
-            ['visit_date', 'INPUT target', 100],
-            ['score', 'missing flag source', 90],
-            ['age', 'derived category source', 85],
-            ['expected_qc_flag', 'validation target', 80]
+            ['visit_dtc', 'INPUT target', 100],
+            ['score_raw', 'numeric parse', 90],
+            ['qc_flag', 'evidence flag', 90],
+            ['rule', 'traceable transform', 85]
           ]
         }
       },
       summarize: {
-        dataset: {
+        database: {
+          label: 'database QC summary',
           table: {
-            headers: ['group', 'age_group', 'subject_id', 'score', 'qc_missing_score', 'outlier_flag', 'site_id'],
+            headers: ['slice', 'n', 'nmiss_score', 'min_score', 'max_score', 'action'],
             rows: [
-              ['A', 'LT40', 'S001', '12.5', '0', '0', '101'],
-              ['A', 'LT40', 'S003', '15.2', '0', '0', '102'],
-              ['B', 'GE40', 'S002', '', '1', '0', '101'],
-              ['C', 'GE40', 'S004', '18.9', '0', '0', '102'],
-              ['C', 'GE40', 'S006', '99.9', '0', '1', '103']
+              ['site 101', '2', '1', '12.5', '13.1', 'review missing'],
+              ['site 102', '2', '0', '15.2', '18.9', 'clean'],
+              ['group A', '2', '0', '12.5', '15.2', 'profile'],
+              ['overall', '4', '1', '12.5', '18.9', 'keep evidence']
             ]
           },
           profiles: [
-            ['group', 'PROC FREQ level', 100],
-            ['age_group', 'CLASS variable', 90],
-            ['score', 'PROC MEANS var', 100],
-            ['outlier_flag', 'QC stratum', 75]
+            ['n', 'row count', 100],
+            ['nmiss_score', 'missing check', 95],
+            ['min/max', 'range check', 90],
+            ['action', 'QC decision', 85]
           ]
         }
       },
       sortBy: {
-        dataset: {
+        database: {
+          label: 'database key review',
           table: {
-            headers: ['subject_id', 'visit_num', 'visit_dt', 'score', 'source_row', 'expected_first', 'duplicate_key'],
+            headers: ['subject_id', 'visit_num', 'visit_dt', 'sort_key', 'dup_status', 'first_visit'],
             rows: [
-              ['S001', '1', '2026-01-02', '12.5', '1', 'Y', 'N'],
-              ['S001', '2', '2026-01-16', '13.1', '2', 'N', 'N'],
-              ['S002', '1', '2026-01-03', '', '3', 'Y', 'N'],
-              ['S003', '1', '2026-01-04', '15.2', '4', 'Y', 'Y'],
-              ['S003', '1', '2026-01-04', '15.2', '5', 'N', 'Y']
+              ['S001', '1', '2026-01-02', 'subject+date', 'unique', 'Y'],
+              ['S001', '2', '2026-01-16', 'subject+date', 'unique', 'N'],
+              ['S002', '1', '2026-01-03', 'subject+date', 'unique', 'Y'],
+              ['S003', '1', '2026-01-04', 'subject+date', 'duplicate', 'review']
             ]
           },
           profiles: [
-            ['subject_id', 'BY group key', 100],
+            ['subject_id', 'BY key', 100],
             ['visit_dt', 'sort order', 95],
-            ['expected_first', 'FIRST. target', 85],
-            ['duplicate_key', 'DUPOUT evidence', 90]
+            ['dup_status', 'DUPOUT evidence', 90],
+            ['first_visit', 'FIRST. target', 85]
           ]
         }
       },
       sql: {
-        dataset: {
+        database: {
+          label: 'database relationship sample',
           table: {
-            headers: ['table', 'subject_id', 'visit_dt', 'site_id', 'site_name', 'score', 'join_issue'],
+            headers: ['left_table', 'right_table', 'join_key', 'before_rows', 'after_rows', 'risk'],
             rows: [
-              ['visits', 'S001', '2026-01-02', '101', '', '12.5', 'needs site join'],
-              ['visits', 'S002', '2026-01-03', '101', '', '', 'missing measure'],
-              ['visits', 'S003', '2026-01-04', '102', '', '15.2', 'needs site join'],
-              ['sites', '', '', '101', 'North', '', 'one row per site'],
-              ['sites', '', '', '102', 'South', '', 'one row per site']
+              ['src.visits', 'src.sites', 'site_id', '4', '4', 'one-to-one'],
+              ['src.visits', 'src.rules', 'endpoint_id', '4', '6', 'row multiply'],
+              ['src.visits', 'qc.dup_keys', 'subject_id', '4', '5', 'key review'],
+              ['src.sites', 'src.regions', 'region_id', '2', '2', 'clean']
             ]
           },
           profiles: [
-            ['site_id', 'join key', 100],
-            ['subject_id', 'group by key', 90],
-            ['score', 'aggregate measure', 85],
-            ['join_issue', 'row count risk', 80]
+            ['join_key', 'relationship', 100],
+            ['before_rows', 'baseline', 95],
+            ['after_rows', 'join evidence', 95],
+            ['risk', 'decision', 90]
           ]
         }
       },
       clinical: {
-        dataset: {
+        database: {
+          label: 'clinical database boundary',
           table: {
-            headers: ['source_layer', 'subject_id', 'usubjid', 'domain_hint', 'source_var', 'derived_var', 'phi_risk'],
+            headers: ['database_table', 'layer', 'source_key', 'mapped_domain', 'trace_rule', 'privacy'],
             rows: [
-              ['raw', 'S001', 'TRAINING-S001', 'DM', 'subject_id', 'USUBJID', 'none'],
-              ['raw', 'S001', 'TRAINING-S001', 'VS', 'visit_date', 'VSDTC', 'none'],
-              ['raw', 'S002', 'TRAINING-S002', 'DM', 'group', 'ARM', 'none'],
-              ['metadata', '', '', 'define.xml', 'label/type/length', 'metadata contract', 'none'],
-              ['analysis', 'S003', 'TRAINING-S003', 'ADaM', 'score', 'AVAL', 'none']
+              ['edc.subjects', 'raw', 'subject_id', 'DM', 'USUBJID', 'de-id only'],
+              ['edc.visits', 'raw', 'subject+visit', 'VS', 'VSDTC', 'de-id only'],
+              ['analysis.rules', 'metadata', 'endpoint_id', 'ADaM', 'PARAMCD', 'approved SAP'],
+              ['delivery.tlf_index', 'output', 'table_id', 'TLF', 'shell trace', 'no PHI']
             ]
           },
           profiles: [
-            ['source_layer', 'clinical boundary', 100],
-            ['domain_hint', 'SDTM/ADaM cue', 95],
-            ['derived_var', 'traceability target', 90],
-            ['phi_risk', 'privacy gate', 100]
+            ['layer', 'clinical boundary', 100],
+            ['mapped_domain', 'standard cue', 95],
+            ['trace_rule', 'derivation path', 90],
+            ['privacy', 'public gate', 100]
           ]
         }
       },
       biostats: {
-        dataset: {
+        database: {
+          label: 'analysis rule database',
           table: {
-            headers: ['source_doc', 'stat_decision', 'programming_impact', 'qc_evidence', 'review_risk'],
+            headers: ['source_doc', 'rule_table', 'stat_decision', 'programming_impact', 'qc_evidence'],
             rows: [
-              ['Protocol', 'endpoint definition', 'derive endpoint flag', 'endpoint trace table', 'ambiguous visit window'],
-              ['SAP', 'estimand strategy', 'ADaM derivation rule', 'analysis rule matrix', 'intercurrent event not specified'],
-              ['Randomization spec', 'stratification factor', 'ADSL treatment/strata variables', 'randomization reconciliation', 'unblinding risk'],
-              ['TLF shell', 'row/column/footnote', 'PROC REPORT layout', 'shell-to-output check', 'missing denominator rule'],
-              ['CSR section', 'interpretation context', 'output package index', 'traceable output list', 'numbers not tied to ADaM']
+              ['Protocol', 'analysis_rules', 'endpoint', 'derive flag', 'trace table'],
+              ['SAP', 'estimand_rules', 'intercurrent event', 'ADaM rule', 'review matrix'],
+              ['Randomization', 'strata_ref', 'stratification', 'ADSL vars', 'reconcile'],
+              ['TLF shell', 'tlf_index', 'denominator', 'PROC REPORT', 'shell check']
             ]
           },
           profiles: [
-            ['source_doc', 'approved instruction', 100],
-            ['stat_decision', 'analysis rule', 95],
-            ['programming_impact', 'SAS derivation target', 90],
-            ['qc_evidence', 'review artifact', 90],
-            ['review_risk', 'blocker', 80]
+            ['source_doc', 'approved source', 100],
+            ['rule_table', 'database contract', 90],
+            ['programming_impact', 'SAS target', 90],
+            ['qc_evidence', 'review artifact', 90]
           ]
         }
       },
       report: {
-        dataset: {
+        database: {
+          label: 'database delivery evidence',
           table: {
-            headers: ['report_section', 'source_table', 'metric', 'value', 'footnote_needed', 'trace_source'],
+            headers: ['section', 'source_table', 'metric', 'value', 'trace_source'],
             rows: [
-              ['QC Summary', 'analysis_ready', 'row_count', '420', 'Y', 'PROC SQL count'],
-              ['QC Summary', 'analysis_ready', 'missing_score', '18', 'Y', 'PROC MEANS NMISS'],
-              ['Group Summary', 'analysis_ready', 'mean_score_A', '13.8', 'N', 'PROC REPORT'],
-              ['Log Review', 'run.log', 'warnings', '1', 'Y', 'scan_sas_log.py']
+              ['QC Summary', 'work.raw_visits', 'row_count', '4', 'PROC SQL'],
+              ['Missing Review', 'work.analysis_ready', 'missing_score', '1', 'PROC MEANS'],
+              ['Join Review', 'work.visit_site', 'after_rows', '4', 'join count'],
+              ['Log Review', 'run.log', 'warnings', 'reviewed', 'scan_sas_log.py']
             ]
           },
           profiles: [
-            ['report_section', 'ODS section', 90],
+            ['section', 'ODS section', 90],
             ['metric', 'reported number', 100],
-            ['footnote_needed', 'delivery caveat', 85],
+            ['value', 'reviewed result', 90],
             ['trace_source', 'audit trail', 100]
           ]
         }
       },
       validate: {
-        dataset: {
+        database: {
+          label: 'database handoff gate',
           table: {
-            headers: ['evidence_item', 'expected', 'actual', 'status', 'blocker'],
+            headers: ['evidence', 'expected', 'actual', 'status', 'blocker'],
             rows: [
               ['SAS log ERROR', '0', '0', 'PASS', ''],
-              ['SAS log WARNING', '0 reviewed', '1 reviewed', 'WARN', 'format not found note reviewed'],
-              ['row count after transform', '420', '420', 'PASS', ''],
-              ['distinct subject_id', '210', '209', 'FAIL', 'duplicate subject visit key'],
-              ['runtime backend', 'SAS session', 'not configured', 'BLOCKED', 'requires SAS 9.4/OnDemand/Viya']
+              ['row count extract', '4', '4', 'PASS', ''],
+              ['join row count', '4', '4', 'PASS', ''],
+              ['distinct subject key', '3', '2', 'FAIL', 'duplicate visit key'],
+              ['runtime backend', 'SAS session', 'not configured', 'BLOCKED', 'needs SAS runtime']
             ]
           },
           profiles: [
-            ['evidence_item', 'validation target', 100],
+            ['evidence', 'validation target', 100],
             ['actual', 'observed result', 90],
             ['status', 'gate state', 100],
             ['blocker', 'stop condition', 95]
@@ -1365,42 +1568,42 @@
     const modules = [
       {
         id: 'orient',
-        title: '資料入口與學習目標',
-        subtitle: 'source type / grain / risk',
-        objective: '先判斷來源是 spec、dataset 還是 database，並說清楚一列資料代表什麼。',
+        title: 'Database 入口與學習目標',
+        subtitle: 'schema / grain / risk',
+        objective: '以 database table 為唯一來源，先確認 schema、table grain、bounded sample、key 與資料存取風險。',
         flow: 'Orient',
         refs: ['littleSasBook', 'littleSasExcerpt', 'dataStep', 'import', 'sasCodeExamples', 'uclaModules'],
         concepts: [
-          ['Little SAS 對照', '先用短主題理解 SAS language、SAS data set、DATA step 與 PROC step，再回到本課判斷 source type。'],
-          ['Source type', 'Dataset 有實際資料列；spec 是欄位契約；database 需要先界定 table 與抽樣策略。'],
-          ['Grain', '每一列代表 subject、visit、lab result 或 metadata row，會決定 key 和 QC 方法。'],
+          ['Little SAS 對照', '先用短主題理解 SAS language、SAS data set、DATA step 與 PROC step，再回到 database table 的 metadata 與 bounded sample。'],
+          ['Database first', '本網站只保留 database workflow；先看 schema 與 dictionary metadata，再決定抽樣與 join。'],
+          ['Grain', '每張 table 的一列可能代表 subject、visit、site、analysis rule 或 metadata row，會決定 key 和 QC 方法。'],
           ['Evidence first', '從一開始就保留 row count、欄位數、log scan 和缺口清單。'],
           ['Runtime boundary', '網站能教學和產生 skeleton，但 SAS runtime 還是要在 SAS session 執行。']
         ],
-        tasks: ['指出來源類型與一列資料的意義。', '列出候選 key、日期欄位、類別欄位與數值欄位。', '寫下現在不能驗證的部分，例如 SAS backend、DSN、或真實資料缺口。'],
-        mistakes: ['看到 CSV 就直接分析，沒有先確認 row grain。', '把 data dictionary 當成真實資料值。', '對 database 直接 select * 全表。'],
-        checks: ['來源類型已標記', '資料 grain 已描述', '缺少的 runtime 條件已列出'],
+        tasks: ['指出 database table grain 與候選 key。', '列出日期欄位、join 欄位、類別欄位與數值欄位。', '寫下現在不能驗證的部分，例如 SAS backend、DSN、schema 權限或真實資料缺口。'],
+        mistakes: ['對 database 直接 select * 全表。', '只看欄位名稱，不確認 nullable、type、length 與 table grain。', 'Join 前沒有確認 key uniqueness。'],
+        checks: ['database schema 已確認', 'table grain 已描述', '缺少的 runtime 條件已列出'],
         quiz: [
-          { question: '只有 data dictionary，還沒有真實資料列時，第一個 QC 重點是什麼？', choices: ['先跑 PROC MEANS', '比對欄位 contract', '直接做 TLF'], answer: 1, feedback: '正確。Spec 先驗 metadata contract，不能假設資料值已存在。' },
+          { question: '只有 database schema metadata，還沒有 bounded sample 時，第一個 QC 重點是什麼？', choices: ['先跑 PROC MEANS', '比對欄位 contract 與 table grain', '直接做 TLF'], answer: 1, feedback: '正確。Database 入口先驗 metadata contract、grain 與 key，再抽樣看資料列。' },
           { question: 'Database onboarding 的第一個安全動作是什麼？', choices: ['拉整張表', '先看 metadata 與 bounded sample', '先做 PROC REPORT'], answer: 1, feedback: '正確。Database 要先界定表、欄位、資料量和權限。' }
         ]
       },
       {
         id: 'library',
         title: 'SAS Library 與資料位置',
-        subtitle: 'LIBNAME / WORK / permanent data',
-        objective: '理解 WORK 暫存表、永久 library、外部資料來源與輸出資料夾的差異。',
+        subtitle: 'LIBNAME / ODBC / WORK',
+        objective: '理解 database LIBNAME、WORK 暫存表、bounded extract 與 QC output 的差異。',
         flow: 'Library',
         refs: ['littleSasBook', 'littleSasData', 'dataStep', 'learningByExample', 'procXGit'],
         concepts: [
           ['Little SAS 對照', '把 SAS data libraries、WORK、永久資料集當成本課的先備概念。'],
           ['WORK', 'WORK 是 session 暫存 library，重開 session 後不保留。'],
-          ['LIBNAME', 'LIBNAME 把 SAS 名稱連到資料夾、資料庫或其他引擎。'],
+          ['LIBNAME', 'LIBNAME 把 SAS 名稱連到 database engine、schema 或其他受控資料來源。'],
           ['Separation', 'raw、derived、reports 分開，教學和 QC 會更清楚。'],
           ['Naming', '資料集名稱、欄位名稱要遵守 SAS 命名限制或使用 name literal。']
         ],
-        tasks: ['建立 raw、derived、reports 的資料位置。', '用 PROC DATASETS 或 PROC CONTENTS 確認 library 內容。', '把產生的資料放進 work 或 derived，避免覆寫 raw。'],
-        mistakes: ['把原始資料直接覆寫。', '不知道 WORK 會隨 session 消失。', '把 database library 當成本機資料夾。'],
+        tasks: ['建立 SRC database libref 與 QC output 位置。', '用 PROC CONTENTS 或 dictionary.columns 確認 database table metadata。', '把 bounded extract 放進 WORK，避免改動 source table。'],
+        mistakes: ['把 database library 當成本機資料夾。', '不知道 WORK 會隨 session 消失。', '把 extract 當成完整資料庫母體。'],
         checks: ['LIBNAME 成功且 log 無 ERROR', 'raw 與 derived 沒混用', '輸出目的地已清楚標示'],
         quiz: [
           { question: 'WORK library 的主要特性是什麼？', choices: ['永久保存', 'session 暫存', '只能放 Excel'], answer: 1, feedback: '正確。WORK 是暫存區。' },
@@ -1409,24 +1612,24 @@
       },
       {
         id: 'import',
-        title: '匯入與建立 WORK.SOURCE',
-        subtitle: 'PROC IMPORT / bounded extract',
-        objective: '把外部來源變成穩定的 SAS table，並降低型別猜測、長度截斷與抽樣偏誤。',
+        title: 'Bounded extract 與 WORK.SOURCE',
+        subtitle: 'LIBNAME / OUTOBS / WHERE',
+        objective: '把 database table 轉成可審查的 bounded SAS table，並降低全表拉取、權限與抽樣偏誤。',
         flow: 'Import',
         refs: ['littleSasBook', 'littleSasData', 'import', 'informat', 'sasCodeExamples', 'learningByExample'],
         concepts: [
-          ['Little SAS 對照', '先理解 getting data into SAS，再比較 PROC IMPORT、INFILE/INPUT 與 XLSX/CSV 的風險。'],
-          ['PROC IMPORT', '適合初學者快速匯入 CSV、Excel 等外部檔案，但仍要檢查型別與長度。'],
-          ['GUESSINGROWS', 'CSV 型別猜測可能受前幾列影響，教學時要明確檢查結果。'],
-          ['Excel risk', '混合型別欄位可能被猜錯，匯入後必須看 PROC CONTENTS。'],
+          ['Little SAS 對照', '先理解 getting data into SAS，再把重點放在 database LIBNAME、bounded SQL 與 extract QC。'],
+          ['Database extract', 'Database 入口要用 OUTOBS=、WHERE 或受控 view 限制資料量。'],
+          ['Metadata before rows', '先看 dictionary metadata，再決定要抽哪些欄位與列。'],
+          ['Credential boundary', 'DSN、帳密與 schema 權限不能寫進公開教學程式。'],
           ['Database extract', 'Database 入口先用 outobs 或 where 限制資料量。']
         ],
-        tasks: ['使用正確 DBMS 或 LIBNAME 引擎匯入。', '匯入後立刻跑 PROC CONTENTS。', '記錄 row count 與欄位數。'],
-        mistakes: ['匯入成功就當作正確。', '沒有檢查日期是否是 SAS date。', '忘記 getnames=yes 或匯入錯 worksheet。'],
-        checks: ['WORK.SOURCE 或 source_spec 已建立', 'log 沒有 ERROR', '匯入策略符合來源類型'],
+        tasks: ['使用正確 database LIBNAME 或受控 view。', 'extract 後立刻跑 PROC CONTENTS。', '記錄 row count、欄位數與 where/outobs 條件。'],
+        mistakes: ['extract 成功就當作正確。', '沒有檢查日期是否是 SAS date。', '忘記記錄 where/outobs 條件。'],
+        checks: ['WORK.RAW_VISITS 已建立', 'log 沒有 ERROR', 'extract 條件已記錄'],
         quiz: [
-          { question: 'CSV 匯入時，為什麼常加入 guessingrows=max？', choices: ['增加圖表解析度', '降低型別猜測截斷風險', '自動刪除 missing'], answer: 1, feedback: '正確。它讓 SAS 用更多列判斷欄位型別與長度。' },
-          { question: 'PROC IMPORT 後最該立刻做什麼？', choices: ['PROC CONTENTS', 'PROC DELETE', 'ODS PDF'], answer: 0, feedback: '正確。先確認欄位 metadata。' }
+          { question: 'Database extract 為什麼要先加 outobs= 或 where？', choices: ['增加圖表解析度', '建立 bounded sample 並避免拉全表', '自動刪除 missing'], answer: 1, feedback: '正確。Database onboarding 先用 bounded sample 控制資料量與風險。' },
+          { question: '建立 WORK.RAW_VISITS 後最該立刻做什麼？', choices: ['PROC CONTENTS', 'PROC DELETE', 'ODS PDF'], answer: 0, feedback: '正確。先確認欄位 metadata 與實際 extract 結構。' }
         ]
       },
       {
@@ -1441,9 +1644,9 @@
           ['PROC CONTENTS', '取得資料集 metadata，是初學者進入任何資料前的第一個檢查。'],
           ['dictionary.columns', '適合跨 library 或 database table 查欄位清單。'],
           ['OBS sample', 'PROC PRINT(obs=) 只能看樣本，不等於資料品質驗證完成。'],
-          ['Name mismatch', '大小寫、空白、底線和 name literal 都可能造成 spec 對不上。']
+          ['Name mismatch', '大小寫、空白、底線和 name literal 都可能造成 database 欄位對不上。']
         ],
-        tasks: ['輸出欄位清單到 work.columns。', '人工檢查前 10 列是否符合預期。', '比對 spec 與 actual columns。'],
+        tasks: ['輸出 database 欄位清單到 work.columns。', '人工檢查 bounded sample 前 10 列是否符合預期。', '比對 dictionary.columns 與 actual extract columns。'],
         mistakes: ['只看前幾列就推論整份資料。', '忽略 character length 截斷。', '沒有看 format/informat。'],
         checks: ['PROC CONTENTS 已保存', '前 10 列已人工檢查', '日期與 ID 欄位已確認'],
         quiz: [
@@ -1521,7 +1724,7 @@
         id: 'sql',
         title: 'PROC SQL 查詢與 join',
         subtitle: 'SELECT / GROUP BY / JOIN',
-        objective: '用 PROC SQL 做抽樣、彙總、join 與 spec gap table，同時注意 join key 和 row multiplication。',
+        objective: '用 PROC SQL 做抽樣、彙總、join 與 relationship gap table，同時注意 join key 和 row multiplication。',
         flow: 'SQL',
         refs: ['littleSasBook', 'littleSasExercises', 'sqlJoin', 'uclaSql', 'sasCodeExamples'],
         concepts: [
@@ -1596,7 +1799,7 @@
           ['Title/footnote', '教學交付要標示資料來源、執行時間、限制。'],
           ['Accessibility', '正式報表要注意標題、欄位名稱與可讀性。']
         ],
-        tasks: ['建立 QC summary HTML。', '把 row count/spec gap/log scan 結果放進報告。', '在報告中列出未驗證 blocker。'],
+        tasks: ['建立 QC summary HTML。', '把 row count、join gap、log scan 結果放進報告。', '在報告中列出未驗證 blocker。'],
         mistakes: ['只交截圖，不交可重跑輸出。', '沒有標示資料日期或執行環境。', '報表數字沒有連到 QC evidence。'],
         checks: ['ODS output 已產生', '報表含資料來源與限制', '數字可追到程式與 log'],
         quiz: [
@@ -1629,7 +1832,7 @@
     ];
 
     let activeModule = modules[0].id;
-    let activeSource = 'dataset';
+    let activeSource = 'database';
     const completed = new Set(JSON.parse(localStorage.getItem('sasTutorCompleted') || '[]'));
 
     const moduleList = document.getElementById('module-list');
@@ -1656,8 +1859,12 @@
     }
 
     function currentPractice(module, source) {
-      return (lessonPractice[module.id] && lessonPractice[module.id][source])
-        || sourceProfiles[source];
+      const practice = (lessonPractice[module.id] && lessonPractice[module.id][source])
+        || sourceProfiles.database;
+      return {
+        ...practice,
+        label: practice.label || 'database bounded sample'
+      };
     }
 
     function escapeHtml(value) {
@@ -1736,7 +1943,7 @@
 
       if (issues.length === 0) {
         notes.push('NOTE: 教學編譯檢查完成。未偵測到會阻擋 SAS step 結束的語法問題。');
-        notes.push(`NOTE: Current lesson=${module.title}; source=${activeSource}.`);
+        notes.push(`NOTE: Current lesson=${module.title}; source=database.`);
         notes.push('NOTE: 這是靜態教學檢查，不等同於 SAS 9.4/OnDemand/Viya runtime execution。');
       }
 
@@ -1758,9 +1965,9 @@
       const profile = currentPractice(module, source);
       if (module.id === 'summarize') {
         return {
-          title: source === 'spec' ? 'PROC FREQ type/required' : 'QC Summary',
-          headers: source === 'spec' ? ['type', 'required', 'count'] : ['group', 'n', 'missing_score', 'mean_score'],
-          rows: source === 'spec' ? [['char', 'Y', 2], ['date', 'Y', 1], ['num', 'N', 1]] : [['A', 2, 0, 13.85], ['B', 1, 1, '.'], ['C', 1, 0, 18.9]],
+          title: 'Database QC Summary',
+          headers: ['slice', 'n', 'nmiss_score', 'min_score', 'max_score'],
+          rows: [['site 101', 2, 1, 12.5, 13.1], ['site 102', 2, 0, 15.2, 18.9], ['overall', 4, 1, 12.5, 18.9]],
           note: '摘要結果用來檢查資料分布與 missing，不是正式統計結論。'
         };
       }
@@ -1774,9 +1981,9 @@
       }
       if (module.id === 'sql') {
         return {
-          title: source === 'database' ? 'Joined bounded sample' : 'Subject summary',
-          headers: source === 'database' ? ['subject_id', 'visit_date', 'score', 'site_name'] : ['subject_id', 'group', 'visit_count', 'mean_score'],
-          rows: source === 'database' ? [['S001', '2026-01-02', 12.5, 'North'], ['S002', '2026-01-03', '.', 'North'], ['S003', '2026-01-04', 15.2, 'South']] : [['S001', 'A', 1, 12.5], ['S002', 'B', 1, '.'], ['S003', 'A', 1, 15.2]],
+          title: 'Joined bounded sample',
+          headers: ['subject_id', 'visit_date', 'score', 'site_name'],
+          rows: [['S001', '2026-01-02', 12.5, 'North'], ['S002', '2026-01-03', '.', 'North'], ['S003', '2026-01-04', 15.2, 'South']],
           note: 'Join 或 group by 前後要保存 row count，避免 key grain 錯誤。'
         };
       }
@@ -1883,6 +2090,31 @@
       </div>`).join('');
     }
 
+    function renderDatabaseVisual(module) {
+      document.getElementById('database-flow').innerHTML = databaseFlow.map(([id, label, detail]) => `<div class="flow-node ${id === module.id ? 'active' : ''}">
+        <strong>${escapeHtml(label)}</strong>
+        <span>${escapeHtml(detail)}</span>
+      </div>`).join('');
+
+      document.getElementById('relationship-map').innerHTML = relationshipTables.map(([table, fields], index) => {
+        const card = `<div class="table-card">
+          <strong>${escapeHtml(table)}</strong>
+          ${fields.map((field) => `<code>${escapeHtml(field)}</code>`).join('')}
+        </div>`;
+        if (index === relationshipTables.length - 1) return card;
+        return `${card}<div class="relation-line">join</div>`;
+      }).join('');
+
+      const metrics = visualMetricLibrary[module.id] || visualMetricLibrary.orient;
+      document.getElementById('metric-board').innerHTML = metrics.map(([label, value]) => `<div class="metric-card">
+        <div>
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value)}</strong>
+        </div>
+        <div class="metric-value">QC</div>
+      </div>`).join('');
+    }
+
     function bridgeForModule(module) {
       const concept = module.concepts[0] || ['課文焦點', module.objective];
       return {
@@ -1922,7 +2154,7 @@
 
     function render() {
       const module = currentModule();
-      const sourceMeta = sourceProfiles[activeSource];
+      const sourceMeta = sourceProfiles.database;
       const profile = currentPractice(module, activeSource);
       document.getElementById('lesson-title').textContent = module.title;
       document.getElementById('lesson-objective').textContent = module.objective;
@@ -1931,25 +2163,16 @@
       renderModules();
       renderTable(profile);
       renderBars(profile);
+      renderDatabaseVisual(module);
       renderLessonNotes(module);
       resetRunOutput();
       saveProgress();
-      document.querySelectorAll('.chip').forEach((chip) => {
-        chip.setAttribute('aria-pressed', String(chip.dataset.source === activeSource));
-      });
     }
 
     moduleList.addEventListener('click', (event) => {
       const button = event.target.closest('[data-module]');
       if (!button) return;
       activeModule = button.dataset.module;
-      render();
-    });
-
-    document.querySelector('.source-switcher').addEventListener('click', (event) => {
-      const button = event.target.closest('[data-source]');
-      if (!button) return;
-      activeSource = button.dataset.source;
       render();
     });
 

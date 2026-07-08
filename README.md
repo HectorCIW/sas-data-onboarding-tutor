@@ -18,6 +18,8 @@ text is copied into this site.
 
 The lesson workspace includes a study bridge panel that turns course text into
 three learner-facing actions: reading focus, SAS action, and QC evidence.
+The main lesson path is database-only and adds visual database workflow,
+table-relationship, and QC metric panels for each lesson.
 
 ## Data Boundary
 
