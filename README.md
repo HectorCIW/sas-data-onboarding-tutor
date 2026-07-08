@@ -11,9 +11,10 @@ Public static teaching site for beginner SAS data onboarding practice.
 ## Learning Sources
 
 The lesson workspace references SAS Help Center, SAS GitHub examples, UCLA OARC
-modules, PHUSE examples, and The Little SAS Book resources. Links are shown
-inside each lesson as learning references; no copyrighted book text is copied
-into this site.
+modules, PHUSE examples, The Little SAS Book resources, and YIAN GROUP
+biostatistics/statistical-programming training. Links are shown inside each
+lesson as learning references; no copyrighted book text or third-party lesson
+text is copied into this site.
 
 ## Data Boundary
 

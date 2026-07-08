@@ -914,6 +914,14 @@
         title: 'GitHub: Little SAS Book exercises',
         url: 'https://github.com/sassoftware/little-sas-book-exercises-6ed'
       },
+      yianBiostatistics: {
+        title: 'YIAN GROUP: Biostatistics Training',
+        url: 'https://yiangroup.github.io/#biostatistics'
+      },
+      yianStatProgramming: {
+        title: 'YIAN GROUP: Statistical Programming Training',
+        url: 'https://yiangroup.github.io/#statistical-programming'
+      },
       sasCodeExamples: {
         title: 'GitHub: sassoftware/sas-code-examples',
         url: 'https://github.com/sassoftware/sas-code-examples'
@@ -1188,6 +1196,27 @@
           ]
         }
       },
+      biostats: {
+        dataset: {
+          table: {
+            headers: ['source_doc', 'stat_decision', 'programming_impact', 'qc_evidence', 'review_risk'],
+            rows: [
+              ['Protocol', 'endpoint definition', 'derive endpoint flag', 'endpoint trace table', 'ambiguous visit window'],
+              ['SAP', 'estimand strategy', 'ADaM derivation rule', 'analysis rule matrix', 'intercurrent event not specified'],
+              ['Randomization spec', 'stratification factor', 'ADSL treatment/strata variables', 'randomization reconciliation', 'unblinding risk'],
+              ['TLF shell', 'row/column/footnote', 'PROC REPORT layout', 'shell-to-output check', 'missing denominator rule'],
+              ['CSR section', 'interpretation context', 'output package index', 'traceable output list', 'numbers not tied to ADaM']
+            ]
+          },
+          profiles: [
+            ['source_doc', 'approved instruction', 100],
+            ['stat_decision', 'analysis rule', 95],
+            ['programming_impact', 'SAS derivation target', 90],
+            ['qc_evidence', 'review artifact', 90],
+            ['review_risk', 'blocker', 80]
+          ]
+        }
+      },
       report: {
         dataset: {
           table: {
@@ -1274,6 +1303,11 @@
         dataset: `/* Raw to SDTM-style thinking: keep source, derivation, and QC separate. */\ndata work.dm_like;\n    set work.source;\n    studyid = "TRAINING";\n    usubjid = cats(studyid, "-", subject_id);\n    keep studyid usubjid site_id group age;\nrun;\n\nproc contents data=work.dm_like varnum;\nrun;`,
         spec: `/* Define/spec validation before clinical mapping. */\nproc sql;\n    select variable, label, type, length, codelist\n    from work.source_spec\n    where required="Y"\n    order by variable;\nquit;`,
         database: `/* Keep extracted raw data separate from derived clinical domains. */\nproc sql;\n    create table work.raw_visits as\n    select *\n    from src.visits\n    where study_id="TRAINING";\nquit;`
+      },
+      biostats: {
+        dataset: `data work.analysis_trace;\n    length source_doc $24 stat_decision $32 programming_impact $40 qc_evidence $40;\n    infile datalines dsd truncover;\n    input source_doc :$24. stat_decision :$32. programming_impact :$40. qc_evidence :$40.;\ndatalines;\nProtocol,endpoint definition,derive endpoint flag,endpoint trace table\nSAP,estimand strategy,ADaM derivation rule,analysis rule matrix\nRandomization spec,stratification factor,ADSL treatment variables,randomization reconciliation\nTLF shell,row column footnote,PROC REPORT layout,shell to output check\nCSR section,interpretation context,output package index,traceable output list\n;\nrun;\n\nproc print data=work.analysis_trace noobs;\nrun;`,
+        spec: `proc sql;\n    select variable, label, type, length\n    from work.source_spec\n    where upcase(variable) in ("TRT01P", "SAFFL", "PARAMCD", "AVAL", "ANL01FL")\n    order by variable;\nquit;`,
+        database: `proc sql outobs=20;\n    select study_id, endpoint_id, estimand_strategy, intercurrent_event_rule\n    from src.analysis_rules\n    order by endpoint_id;\nquit;`
       },
       report: {
         dataset: `ods html path="reports" file="qc_summary.html";\n\ntitle "QC Summary by Treatment Group";\nproc report data=work.analysis_ready nowd;\n    column group age score;\n    define group / group;\n    define age / analysis mean;\n    define score / analysis mean;\nrun;\n\nods html close;`,
@@ -1470,8 +1504,9 @@
         subtitle: 'raw / SDTM / ADaM / TLF / define.xml',
         objective: '建立 clinical SAS 的資料層級觀念：raw 不等於 SDTM，ADaM 不等於 TLF。',
         flow: 'Clinical',
-        refs: ['dataStep', 'import', 'phuseScripts'],
+        refs: ['yianStatProgramming', 'dataStep', 'import', 'phuseScripts'],
         concepts: [
+          ['YIAN 學習路徑', '先理解 clinical environment、approved documents、source data、SDTM、ADaM、TLF 與 QC 的順序。'],
           ['Raw', '原始或訓練資料保留來源欄位和收集方式。'],
           ['SDTM', '偏向標準化收集/觀察資料結構，例如 DM、AE、LB。'],
           ['ADaM', '偏向分析資料集，強調 traceability、parameter、analysis value。'],
@@ -1483,6 +1518,28 @@
         quiz: [
           { question: 'define.xml 的角色最接近什麼？', choices: ['metadata exchange', '實際 lab result row', 'SAS log'], answer: 0, feedback: '正確。define.xml 是 metadata，不是分析資料本體。' },
           { question: 'ADaM 的核心要求之一是什麼？', choices: ['traceability', '隨機改名欄位', '刪除所有來源欄位'], answer: 0, feedback: '正確。分析資料要能追溯來源與衍生邏輯。' }
+        ]
+      },
+      {
+        id: 'biostats',
+        title: '臨床統計銜接',
+        subtitle: 'Protocol / SAP / estimand / CSR',
+        objective: '把 biostatistics 的 study design、SAP、estimand、blinding 與 CSR/TLF 要求轉成 SAS programmer 可追溯的資料任務。',
+        flow: 'Biostatistics',
+        refs: ['yianBiostatistics', 'yianStatProgramming', 'sasCodeExamples', 'phuseScripts'],
+        concepts: [
+          ['YIAN 內化重點', 'Biostatistics 不是只算 p-value，而是把 regulatory guidance、protocol、SAP、TLF/CSR 串成可審查的 evidence path。'],
+          ['Protocol to SAP', 'Protocol 定義問題與訪視；SAP 定義 population、endpoint、baseline、missing data、multiplicity 與方法。'],
+          ['Blinding/randomization', 'SAS programmer 要保護 blind、追蹤 randomization/strata，不可用未核准資訊調整分析。'],
+          ['Estimand', '先釐清 treatment、population、variable、intercurrent event strategy、summary measure，再寫 ADaM derivation。'],
+          ['CSR/TLF', '最終輸出要能從 TLF shell 追到 ADaM、SDTM 與 source decision。']
+        ],
+        tasks: ['建立 Protocol/SAP/TLF/CSR 到 SAS dataset 的 trace matrix。', '列出 endpoint、population、baseline、intercurrent event、missing data 的程式影響。', '寫出不能開始 production coding 的 blocker，例如 SAP 未定稿或 blind 風險。'],
+        mistakes: ['先寫程式再找 SAP 規則。', '把 clean log 當成統計決策正確的證據。', '沒有把 estimand/intercurrent event 轉成可 QC 的 derivation rule。'],
+        checks: ['Protocol/SAP/TLF source document 已列出', '每個 stat decision 有 programming impact', '每個 output number 可追到 ADaM/SDTM/source'],
+        quiz: [
+          { question: '估計目標 estimand 最應先釐清哪一類資訊？', choices: ['治療、族群、變數、intercurrent event 與 summary measure', '字體大小', '報表頁碼'], answer: 0, feedback: '正確。Estimand 定義臨床問題和分析目標，會直接影響 ADaM derivation。' },
+          { question: '為什麼 clean SAS log 不足以證明分析正確？', choices: ['因為 log 不會證明程式符合 Protocol/SAP/TLF 規則', '因為 log 不能被保存', '因為 log 只用於畫圖'], answer: 0, feedback: '正確。程式可執行不代表統計決策或 derivation rule 正確。' }
         ]
       },
       {
@@ -1696,6 +1753,18 @@
           headers: ['studyid', 'usubjid', 'site_id', 'group', 'age'],
           rows: [['TRAINING', 'TRAINING-S001', 101, 'A', 34], ['TRAINING', 'TRAINING-S002', 101, 'B', 41], ['TRAINING', 'TRAINING-S003', 102, 'A', 29]],
           note: '這只是 SDTM-style thinking，不代表已符合 CDISC submission。'
+        };
+      }
+      if (module.id === 'biostats') {
+        return {
+          title: 'Protocol/SAP/TLF trace matrix',
+          headers: ['source_doc', 'stat_decision', 'programming_impact', 'qc_evidence'],
+          rows: [
+            ['Protocol', 'endpoint definition', 'derive endpoint flag', 'endpoint trace table'],
+            ['SAP', 'estimand strategy', 'ADaM derivation rule', 'analysis rule matrix'],
+            ['TLF shell', 'row/column/footnote', 'PROC REPORT layout', 'shell-to-output check']
+          ],
+          note: 'Biostatistics learning is converted into traceable SAS programming decisions, not copied as study guidance.'
         };
       }
       if (module.id === 'report') {
