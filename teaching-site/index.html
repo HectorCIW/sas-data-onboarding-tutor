@@ -270,28 +270,6 @@
       color: var(--muted);
     }
 
-    .source-status {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      color: var(--muted);
-      font-size: .86rem;
-      font-weight: 700;
-    }
-
-    .db-badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 4px 9px;
-      border: 1px solid #bfd7df;
-      border-radius: 999px;
-      background: #f3f9fb;
-      color: var(--accent);
-      font-weight: 900;
-    }
-
     .lesson-body {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(380px, .95fr);
@@ -306,79 +284,6 @@
       border: 1px solid #bfd7df;
       border-radius: 8px;
       background: #f8fbfc;
-    }
-
-    .visual-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .visual-header strong {
-      display: block;
-      font-size: .96rem;
-    }
-
-    .visual-header p {
-      margin: 3px 0 0;
-      color: var(--muted);
-      font-size: .86rem;
-    }
-
-    .flow-rail {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .flow-node {
-      position: relative;
-      min-height: 74px;
-      padding: 9px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #ffffff;
-      overflow: hidden;
-    }
-
-    .flow-node::after {
-      content: "";
-      position: absolute;
-      inset: auto 10px 8px 10px;
-      height: 4px;
-      border-radius: 999px;
-      background: #e7edf3;
-    }
-
-    .flow-node.active {
-      border-color: rgba(31, 111, 139, .55);
-      background: var(--accent-soft);
-    }
-
-    .flow-node.active::after {
-      background: var(--accent);
-    }
-
-    .flow-node strong,
-    .flow-node span {
-      display: block;
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-
-    .flow-node strong {
-      font-size: .82rem;
-      line-height: 1.25;
-    }
-
-    .flow-node span {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: .74rem;
-      line-height: 1.25;
     }
 
     .visual-grid {
@@ -654,11 +559,6 @@
     .quiz-list,
     .checklist,
     .text-list,
-    .reference-list {
-      display: grid;
-      gap: 8px;
-    }
-
     .choice {
       width: 100%;
       min-height: 42px;
@@ -760,17 +660,6 @@
 
     .text-list li {
       padding-left: 2px;
-    }
-
-    .reference-list a {
-      display: block;
-      padding: 8px 9px;
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 700;
-      overflow-wrap: anywhere;
     }
 
     @media (max-width: 1780px) {
@@ -900,7 +789,6 @@
         grid-template-columns: 1fr;
       }
 
-      .flow-rail,
       .visual-grid,
       .er-canvas {
         grid-template-columns: 1fr;
@@ -956,21 +844,9 @@
               <p id="lesson-objective"></p>
             </div>
           </div>
-          <div class="source-status" aria-label="固定資料入口">
-            <span class="db-badge">Database only</span>
-            <span>以 metadata、bounded sample、join key、row count 與 log evidence 學習 SAS database workflow。</span>
-          </div>
         </div>
 
-        <section class="database-visual" aria-label="Database 視覺化學習圖">
-          <div class="visual-header">
-            <div>
-              <strong>Database Onboarding Map</strong>
-              <p>每課都從 schema metadata 開始，逐步走到 bounded sample、join 設計、QC evidence 與交付。</p>
-            </div>
-            <span class="db-badge">ODBC / SQL / DICTIONARY.COLUMNS</span>
-          </div>
-          <div class="flow-rail" id="database-flow" aria-label="Database 四階段流程"></div>
+        <section class="database-visual" aria-label="資料關聯與 QC 圖像">
           <div class="visual-grid">
             <div class="relationship-map">
               <h4>Table Relationship</h4>
@@ -1004,10 +880,6 @@
                 <div>
                   <strong>常見錯誤</strong>
                   <ul class="text-list" id="mistake-list"></ul>
-                </div>
-                <div>
-                  <strong>參考來源</strong>
-                  <div class="reference-list" id="reference-list"></div>
                 </div>
               </div>
             </section>
@@ -1048,101 +920,6 @@
   </div>
 
   <script>
-    const referenceLibrary = {
-      dataStep: {
-        title: 'SAS Help Center: The DATA Step',
-        url: 'https://documentation.sas.com/doc/en/lepg/latest/n14fu9c6l8rxbxn1nvdhlaqtsyho.htm'
-      },
-      import: {
-        title: 'SAS Help Center: IMPORT Procedure',
-        url: 'https://go.documentation.sas.com/doc/ru/pgmsascdc/9.4_3.5/proc/n1qn5sclnu2l9dn1w61ifw8wqhts.htm'
-      },
-      where: {
-        title: 'SAS Help Center: WHERE Statement',
-        url: 'https://documentation.sas.com/doc/en/pgmsascdc/v_069/lestmtsref/n1xbr9r0s9veq0n137iftzxq4g7e.htm'
-      },
-      ifStmt: {
-        title: 'SAS Help Center: IF Statements',
-        url: 'https://documentation.sas.com/doc/en/pgmsascdc/v_064/lepg/p14r1os7eztb29n1tblrzh41rsg9.htm'
-      },
-      freq: {
-        title: 'SAS Help Center: PROC FREQ TABLES Statement',
-        url: 'https://documentation.sas.com/doc/en/procstat/9.4/procstat_freq_syntax08.htm'
-      },
-      sort: {
-        title: 'SAS Help Center: PROC SORT Examples',
-        url: 'https://documentation.sas.com/doc/en/vwbproc/v_001/p0qh2iuz3fa6rpn1eib1gaxr0sb5.htm'
-      },
-      byGroup: {
-        title: 'SAS Help Center: BY-Group Processing',
-        url: 'https://documentation.sas.com/doc/en/pgmsascdc/v_070/lepg/n1nd5dg9h8blkkn19c2lsajf3tzs.htm'
-      },
-      sqlJoin: {
-        title: 'SAS Help Center: PROC SQL Joins',
-        url: 'https://documentation.sas.com/doc/en/sqlproc/latest/p0o4a5ac71mcchn1kc1zhxdnm139.htm'
-      },
-      report: {
-        title: 'SAS Help Center: PROC REPORT Examples',
-        url: 'https://documentation.sas.com/doc/ru/pgmsascdc/9.4_3.5/odsacoutput/n096rqsjmw4m4nn1dvdwf0zvw453.htm'
-      },
-      informat: {
-        title: 'SAS Help Center: Formatted INPUT Statement',
-        url: 'https://documentation.sas.com/doc/en/lestmtsref/latest/p0f9yk6pd4znukn1rlw6hzkg1url.htm'
-      },
-      littleSasBook: {
-        title: 'The Little SAS Book: A Primer, Sixth Edition',
-        url: 'https://sasinstitute.redshelf.com/app/ecom/book/1830656/the-little-sas-book-1830656-9781642953435-lora-d-delwiche-susan-j-slaughter'
-      },
-      littleSasExcerpt: {
-        title: 'SAS excerpt: The Little SAS Book table of contents',
-        url: 'https://www.sas.com/storefront/aux/en/splsb/73044_excerpt.pdf'
-      },
-      littleSasData: {
-        title: 'GitHub: Little SAS Book example data',
-        url: 'https://github.com/sassoftware/little-sas-book'
-      },
-      littleSasExercises: {
-        title: 'GitHub: Little SAS Book exercises',
-        url: 'https://github.com/sassoftware/little-sas-book-exercises-6ed'
-      },
-      yianBiostatistics: {
-        title: 'YIAN GROUP: Biostatistics Training',
-        url: 'https://yiangroup.github.io/#biostatistics'
-      },
-      yianStatProgramming: {
-        title: 'YIAN GROUP: Statistical Programming Training',
-        url: 'https://yiangroup.github.io/#statistical-programming'
-      },
-      sasCodeExamples: {
-        title: 'GitHub: sassoftware/sas-code-examples',
-        url: 'https://github.com/sassoftware/sas-code-examples'
-      },
-      learningByExample: {
-        title: 'GitHub: Learning SAS by Example sample code',
-        url: 'https://github.com/sascommunities/learning-sas-by-example-2nd'
-      },
-      sasAccessSamples: {
-        title: 'GitHub: sassoftware/sas-access-samples',
-        url: 'https://github.com/sassoftware/sas-access-samples'
-      },
-      phuseScripts: {
-        title: 'GitHub: PHUSE clinical SAS scripts',
-        url: 'https://github.com/phuse-org/phuse-scripts'
-      },
-      uclaModules: {
-        title: 'UCLA OARC: SAS Learning Modules',
-        url: 'https://stats.oarc.ucla.edu/sas/modules/'
-      },
-      uclaSql: {
-        title: 'UCLA OARC: Collapsing across observations using PROC SQL',
-        url: 'https://stats.oarc.ucla.edu/sas/modules/collapsing-across-observations-using-proc-sql/'
-      },
-      procXGit: {
-        title: 'PROC-X: Organizing SAS projects in Git',
-        url: 'https://proc-x.com/2020/11/how-to-organize-your-sas-projects-in-git/'
-      }
-    };
-
     const sourceProfiles = {
       database: {
         label: 'database',
@@ -1164,13 +941,6 @@
         ]
       }
     };
-
-    const databaseStages = [
-      ['Connect', 'LIBNAME, schema metadata, table grain', ['orient', 'library']],
-      ['Sample', 'Bounded extract, columns, first rows', ['import', 'inspect']],
-      ['Shape', 'DATA step, summary, keys, SQL joins', ['transform', 'summarize', 'sortBy', 'sql']],
-      ['Deliver', 'Clinical context, reporting, log evidence', ['clinical', 'biostats', 'report', 'validate']]
-    ];
 
     const relationshipTables = [
       ['src.visits', ['subject_id', 'visit_date', 'site_id', 'score']],
@@ -1507,7 +1277,6 @@
         subtitle: 'schema / grain / risk',
         objective: '以 database table 為唯一來源，先確認 schema、table grain、bounded sample、key 與資料存取風險。',
         flow: 'Orient',
-        refs: ['littleSasBook', 'littleSasExcerpt', 'dataStep', 'import', 'sasCodeExamples', 'uclaModules'],
         concepts: [
           ['Little SAS 對照', '先用短主題理解 SAS language、SAS data set、DATA step 與 PROC step，再回到 database table 的 metadata 與 bounded sample。'],
           ['Database first', '本網站只保留 database workflow；先看 schema 與 dictionary metadata，再決定抽樣與 join。'],
@@ -1529,7 +1298,6 @@
         subtitle: 'LIBNAME / ODBC / WORK',
         objective: '理解 database LIBNAME、WORK 暫存表、bounded extract 與 QC output 的差異。',
         flow: 'Library',
-        refs: ['littleSasBook', 'littleSasData', 'dataStep', 'learningByExample', 'procXGit'],
         concepts: [
           ['Little SAS 對照', '把 SAS data libraries、WORK、永久資料集當成本課的先備概念。'],
           ['WORK', 'WORK 是 session 暫存 library，重開 session 後不保留。'],
@@ -1551,7 +1319,6 @@
         subtitle: 'LIBNAME / OUTOBS / WHERE',
         objective: '把 database table 轉成可審查的 bounded SAS table，並降低全表拉取、權限與抽樣偏誤。',
         flow: 'Import',
-        refs: ['littleSasBook', 'littleSasData', 'import', 'informat', 'sasCodeExamples', 'learningByExample'],
         concepts: [
           ['Little SAS 對照', '先理解 getting data into SAS，再把重點放在 database LIBNAME、bounded SQL 與 extract QC。'],
           ['Database extract', 'Database 入口要用 OUTOBS=、WHERE 或受控 view 限制資料量。'],
@@ -1573,7 +1340,6 @@
         subtitle: 'PROC CONTENTS / dictionary tables',
         objective: '在轉換前確認欄位名稱、型別、長度、format、informat、label 與樣本列。',
         flow: 'Inspect',
-        refs: ['littleSasBook', 'littleSasData', 'dataStep', 'uclaModules', 'sasCodeExamples'],
         concepts: [
           ['Little SAS 對照', '把 viewing properties、reading the log、viewing results 變成每次匯入後的固定檢查。'],
           ['PROC CONTENTS', '取得資料集 metadata，是初學者進入任何資料前的第一個檢查。'],
@@ -1595,7 +1361,6 @@
         subtitle: 'LENGTH / INPUT / IF / WHERE',
         objective: '學會建立新欄位、轉日期、篩選列、處理 missing，並避免隱性型別轉換。',
         flow: 'Transform',
-        refs: ['littleSasBook', 'littleSasExercises', 'dataStep', 'where', 'ifStmt', 'informat', 'learningByExample'],
         concepts: [
           ['Little SAS 對照', 'DATA step、built-in loop、assignment statement、IF/WHERE 是本課核心。'],
           ['DATA step', '可建立變數、選列、改欄位、套用條件邏輯，是 SAS 資料轉換核心。'],
@@ -1617,7 +1382,6 @@
         subtitle: 'PROC FREQ / PROC MEANS',
         objective: '用類別分布和連續變數摘要找出 missing、極端值、不合理 category 與資料量問題。',
         flow: 'Summarize',
-        refs: ['littleSasBook', 'littleSasExercises', 'freq', 'uclaModules', 'learningByExample'],
         concepts: [
           ['Little SAS 對照', '把 summarizing data、producing simple reports 當作 QC，不要直接當正式結論。'],
           ['PROC FREQ', '適合 category、flag、missing level、controlled terminology 檢查。'],
@@ -1639,7 +1403,6 @@
         subtitle: 'PROC SORT / FIRST. / LAST.',
         objective: '理解 BY group 前必須排序，並用 NODUPKEY、DUPOUT 和 FIRST./LAST. 做 key 檢查。',
         flow: 'Sort/BY',
-        refs: ['littleSasBook', 'littleSasExercises', 'sort', 'byGroup', 'uclaModules', 'learningByExample'],
         concepts: [
           ['Little SAS 對照', '把 sorting data 與 combining/modifying data 的主題接到本課 BY-group 思維。'],
           ['PROC SORT', 'BY processing 通常需要資料依 BY variables 排序。'],
@@ -1661,7 +1424,6 @@
         subtitle: 'SELECT / GROUP BY / JOIN',
         objective: '用 PROC SQL 做抽樣、彙總、join 與 relationship gap table，同時注意 join key 和 row multiplication。',
         flow: 'SQL',
-        refs: ['littleSasBook', 'littleSasExercises', 'sqlJoin', 'uclaSql', 'sasCodeExamples'],
         concepts: [
           ['Little SAS 對照', '第六版新增 PROC SQL 相關主題，可用來對照 SELECT、GROUP BY、JOIN 的入門語法。'],
           ['SELECT', 'PROC SQL 可讀 SAS data set 或 database table，適合查詢與彙總。'],
@@ -1683,7 +1445,6 @@
         subtitle: 'raw / SDTM / ADaM / TLF / define.xml',
         objective: '建立 clinical SAS 的資料層級觀念：raw 不等於 SDTM，ADaM 不等於 TLF。',
         flow: 'Clinical',
-        refs: ['yianStatProgramming', 'dataStep', 'import', 'phuseScripts'],
         concepts: [
           ['YIAN 學習路徑', '先理解 clinical environment、approved documents、source data、SDTM、ADaM、TLF 與 QC 的順序。'],
           ['Raw', '原始或訓練資料保留來源欄位和收集方式。'],
@@ -1705,7 +1466,6 @@
         subtitle: 'Protocol / SAP / estimand / CSR',
         objective: '把 biostatistics 的 study design、SAP、estimand、blinding 與 CSR/TLF 要求轉成 SAS programmer 可追溯的資料任務。',
         flow: 'Biostatistics',
-        refs: ['yianBiostatistics', 'yianStatProgramming', 'sasCodeExamples', 'phuseScripts'],
         concepts: [
           ['YIAN 內化重點', 'Biostatistics 不是只算 p-value，而是把 regulatory guidance、protocol、SAP、TLF/CSR 串成可審查的 evidence path。'],
           ['Protocol to SAP', 'Protocol 定義問題與訪視；SAP 定義 population、endpoint、baseline、missing data、multiplicity 與方法。'],
@@ -1727,7 +1487,6 @@
         subtitle: 'ODS / PROC REPORT',
         objective: '把 QC 結果和摘要轉成可讀 HTML/PDF/RTF，讓教學結果能被審查。',
         flow: 'Report',
-        refs: ['report', 'phuseScripts', 'sasCodeExamples'],
         concepts: [
           ['ODS', 'Output Delivery System 控制 HTML、PDF、RTF 等輸出目的地。'],
           ['PROC REPORT', '適合整理 display、group、analysis 欄位與 QC table。'],
@@ -1748,7 +1507,6 @@
         subtitle: 'Log scan / row counts / blocker',
         objective: '把 SAS 執行結果轉成可重跑、可審查的 evidence，而不是只看畫面。',
         flow: 'Validate',
-        refs: ['littleSasBook', 'littleSasExcerpt', 'dataStep', 'freq', 'sasCodeExamples', 'phuseScripts'],
         concepts: [
           ['Little SAS 對照', '閱讀 log、查看 results、理解 step boundary 是每次交付前的基本功。'],
           ['ERROR', 'SAS log 中的 ERROR 必須修正，不能只看 output table。'],
@@ -2018,11 +1776,6 @@
     }
 
     function renderDatabaseVisual(module) {
-      document.getElementById('database-flow').innerHTML = databaseStages.map(([label, detail, moduleIds]) => `<div class="flow-node ${moduleIds.includes(module.id) ? 'active' : ''}">
-        <strong>${escapeHtml(label)}</strong>
-        <span>${escapeHtml(detail)}</span>
-      </div>`).join('');
-
       document.getElementById('relationship-map').innerHTML = relationshipTables.map(([table, fields], index) => {
         const card = `<div class="table-card">
           <strong>${escapeHtml(table)}</strong>
@@ -2072,11 +1825,6 @@
       </div>`).join('');
       document.getElementById('task-list').innerHTML = module.tasks.map((task) => `<li>${escapeHtml(task)}</li>`).join('');
       document.getElementById('mistake-list').innerHTML = module.mistakes.map((mistake) => `<li>${escapeHtml(mistake)}</li>`).join('');
-      document.getElementById('reference-list').innerHTML = module.refs
-        .map((key) => referenceLibrary[key])
-        .filter(Boolean)
-        .map((ref) => `<a href="${escapeHtml(ref.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ref.title)}</a>`)
-        .join('');
     }
 
     function render() {

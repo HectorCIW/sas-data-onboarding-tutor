@@ -8,18 +8,13 @@ Public static teaching site for beginner SAS data onboarding practice.
 - `teaching-site/index.html`: lesson workspace
 - `teaching-site/quiz.html`: SAS Studio-like quiz lab
 
-## Learning Sources
-
-The lesson workspace references SAS Help Center, SAS GitHub examples, UCLA OARC
-modules, PHUSE examples, The Little SAS Book resources, and YIAN GROUP
-biostatistics/statistical-programming training. Links are shown inside each
-lesson as learning references; no copyrighted book text or third-party lesson
-text is copied into this site.
+## Learning Design
 
 The lesson workspace includes a study bridge panel that turns course text into
 three learner-facing actions: reading focus, SAS action, and QC evidence.
-The main lesson path is database-only and adds visual database workflow,
-table-relationship, and QC metric panels for each lesson.
+The main lesson path is database-only and keeps visual support focused on
+table relationships and QC metric panels, without a separate reference-source
+section.
 
 ## Data Boundary
 
