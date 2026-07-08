@@ -270,20 +270,6 @@
       color: var(--muted);
     }
 
-    .pill {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 26px;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: var(--green-soft);
-      color: var(--green);
-      font-weight: 800;
-      font-size: .82rem;
-      white-space: nowrap;
-    }
-
     .source-status {
       display: flex;
       flex-wrap: wrap;
@@ -343,7 +329,7 @@
 
     .flow-rail {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 12px;
     }
@@ -539,41 +525,6 @@
       background: #f8fafc;
       color: var(--muted);
       font-weight: 800;
-    }
-
-    .profile-bars {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(132px, 158px));
-      justify-content: start;
-      gap: 6px;
-    }
-
-    .bar-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      align-content: center;
-      gap: 2px;
-      min-height: 46px;
-      padding: 6px 7px;
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      background: #fbfcfd;
-      font-size: .78rem;
-      overflow: hidden;
-    }
-
-    .bar-row span,
-    .bar-row strong {
-      min-width: 0;
-      overflow-wrap: anywhere;
-      word-break: break-word;
-    }
-
-    .bar-row strong {
-      color: var(--accent);
-      font-size: .73rem;
-      line-height: 1.25;
-      text-align: left;
     }
 
     .code-tools {
@@ -992,7 +943,7 @@
       <aside class="sidebar" aria-label="課程模組">
         <div class="section-head">
           <h2>課程路徑</h2>
-          <p id="progress-label">0 / 5 完成</p>
+          <p id="progress-label">0 / 12 完成</p>
         </div>
         <nav class="module-list" id="module-list"></nav>
       </aside>
@@ -1004,7 +955,6 @@
               <h2 id="lesson-title"></h2>
               <p id="lesson-objective"></p>
             </div>
-            <span class="pill" id="source-pill">database</span>
           </div>
           <div class="source-status" aria-label="固定資料入口">
             <span class="db-badge">Database only</span>
@@ -1020,7 +970,7 @@
             </div>
             <span class="db-badge">ODBC / SQL / DICTIONARY.COLUMNS</span>
           </div>
-          <div class="flow-rail" id="database-flow"></div>
+          <div class="flow-rail" id="database-flow" aria-label="Database 四階段流程"></div>
           <div class="visual-grid">
             <div class="relationship-map">
               <h4>Table Relationship</h4>
@@ -1039,13 +989,6 @@
               <h3>練習資料</h3>
               <div class="panel-body">
                 <table class="mini-table" id="sample-table"></table>
-              </div>
-            </section>
-
-            <section class="panel" style="margin-top: 14px;">
-              <h3>欄位 profile</h3>
-              <div class="panel-body">
-                <div class="profile-bars" id="profile-bars"></div>
               </div>
             </section>
 
@@ -1222,19 +1165,11 @@
       }
     };
 
-    const databaseFlow = [
-      ['orient', 'Classify', 'DSN, schema, grain'],
-      ['library', 'Connect', 'LIBNAME / access path'],
-      ['import', 'Bounded sample', 'OUTOBS / WHERE'],
-      ['inspect', 'Metadata', 'dictionary.columns'],
-      ['transform', 'Derive', 'DATA step rules'],
-      ['summarize', 'Profile', 'FREQ / MEANS'],
-      ['sortBy', 'Keys', 'BY group / duplicates'],
-      ['sql', 'Join', 'PROC SQL relationships'],
-      ['clinical', 'Standards', 'raw to SDTM/ADaM'],
-      ['biostats', 'Analysis intent', 'SAP / estimand'],
-      ['report', 'Output', 'ODS / TLF'],
-      ['validate', 'Evidence', 'log / row counts']
+    const databaseStages = [
+      ['Connect', 'LIBNAME, schema metadata, table grain', ['orient', 'library']],
+      ['Sample', 'Bounded extract, columns, first rows', ['import', 'inspect']],
+      ['Shape', 'DATA step, summary, keys, SQL joins', ['transform', 'summarize', 'sortBy', 'sql']],
+      ['Deliver', 'Clinical context, reporting, log evidence', ['clinical', 'biostats', 'report', 'validate']]
     ];
 
     const relationshipTables = [
@@ -1837,7 +1772,6 @@
 
     const moduleList = document.getElementById('module-list');
     const sampleTable = document.getElementById('sample-table');
-    const profileBars = document.getElementById('profile-bars');
     const codeBox = document.getElementById('sas-code');
     const compileStatus = document.getElementById('compile-status');
     const compileSummary = document.getElementById('compile-summary');
@@ -2083,15 +2017,8 @@
       sampleTable.innerHTML = `${header}<tbody>${rows}</tbody>`;
     }
 
-    function renderBars(profile) {
-      profileBars.innerHTML = profile.profiles.map(([name, role]) => `<div class="bar-row">
-        <span>${escapeHtml(name)}</span>
-        <strong>${escapeHtml(role)}</strong>
-      </div>`).join('');
-    }
-
     function renderDatabaseVisual(module) {
-      document.getElementById('database-flow').innerHTML = databaseFlow.map(([id, label, detail]) => `<div class="flow-node ${id === module.id ? 'active' : ''}">
+      document.getElementById('database-flow').innerHTML = databaseStages.map(([label, detail, moduleIds]) => `<div class="flow-node ${moduleIds.includes(module.id) ? 'active' : ''}">
         <strong>${escapeHtml(label)}</strong>
         <span>${escapeHtml(detail)}</span>
       </div>`).join('');
@@ -2154,15 +2081,12 @@
 
     function render() {
       const module = currentModule();
-      const sourceMeta = sourceProfiles.database;
       const profile = currentPractice(module, activeSource);
       document.getElementById('lesson-title').textContent = module.title;
       document.getElementById('lesson-objective').textContent = module.objective;
-      document.getElementById('source-pill').textContent = sourceMeta.label;
       codeBox.value = currentCode(module);
       renderModules();
       renderTable(profile);
-      renderBars(profile);
       renderDatabaseVisual(module);
       renderLessonNotes(module);
       resetRunOutput();
