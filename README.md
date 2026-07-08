@@ -16,6 +16,9 @@ biostatistics/statistical-programming training. Links are shown inside each
 lesson as learning references; no copyrighted book text or third-party lesson
 text is copied into this site.
 
+The lesson workspace includes a study bridge panel that turns course text into
+three learner-facing actions: reading focus, SAS action, and QC evidence.
+
 ## Data Boundary
 
 This repository is for synthetic teaching examples only. Do not publish PHI,

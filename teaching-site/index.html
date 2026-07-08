@@ -564,6 +564,41 @@
       gap: 12px;
     }
 
+    .study-bridge {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid #bfd7df;
+      border-radius: 8px;
+      background: #f3f9fb;
+    }
+
+    .bridge-card {
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid rgba(31, 111, 139, .18);
+      border-radius: 7px;
+      background: #ffffff;
+    }
+
+    .bridge-card span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--accent);
+      font-size: .76rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .bridge-card p {
+      margin: 0;
+      color: var(--ink);
+      font-size: .86rem;
+      line-height: 1.45;
+    }
+
     .note-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -737,6 +772,11 @@
         grid-template-columns: 1fr;
       }
 
+      .study-bridge,
+      .note-grid {
+        grid-template-columns: 1fr;
+      }
+
       .result-pane + .result-pane {
         border-left: 0;
         border-top: 1px solid var(--line);
@@ -805,6 +845,7 @@
             <section class="panel" style="margin-top: 14px;">
               <h3>學習筆記</h3>
               <div class="panel-body lesson-notes">
+                <div class="study-bridge" id="study-bridge" aria-label="課文轉譯"></div>
                 <div class="note-grid" id="concept-grid"></div>
                 <div>
                   <strong>實作步驟</strong>
@@ -1842,7 +1883,30 @@
       </div>`).join('');
     }
 
+    function bridgeForModule(module) {
+      const concept = module.concepts[0] || ['課文焦點', module.objective];
+      return {
+        reading: concept[1],
+        action: module.tasks[0] || module.objective,
+        evidence: module.checks[0] || '完成後保留可審查 evidence'
+      };
+    }
+
     function renderLessonNotes(module) {
+      const bridge = bridgeForModule(module);
+      document.getElementById('study-bridge').innerHTML = `
+        <div class="bridge-card">
+          <span>課文焦點</span>
+          <p>${escapeHtml(bridge.reading)}</p>
+        </div>
+        <div class="bridge-card">
+          <span>SAS 行動</span>
+          <p>${escapeHtml(bridge.action)}</p>
+        </div>
+        <div class="bridge-card">
+          <span>QC 證據</span>
+          <p>${escapeHtml(bridge.evidence)}</p>
+        </div>`;
       document.getElementById('concept-grid').innerHTML = module.concepts.map(([title, text]) => `<div class="note-box">
         <strong>${escapeHtml(title)}</strong>
         <p>${escapeHtml(text)}</p>
